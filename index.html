@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Chista — generative paintings</title>
 <meta name="description" content="Chista is a painter, illustrator and architect who works in code: generative series that begin by hand, each with its own engine for watercolour, pastel, ink, etching, wool or oil.">
 <meta property="og:title" content="Chista — generative paintings">
@@ -13,307 +13,374 @@
 <meta name="twitter:site" content="@chistaai">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#F4EFE6;--ink:#2A2622;--mute:#7A6F63;--soft:#4A433C;--line:#DCD3C5;--card:#EAE2D4;--red:#A8322A}
+:root{--paper:#F5F2EC;--ink:#1B1917;--mute:#8A8076;--soft:#4B443D;--red:#B0322A;--night:#0E0D0C;--nightInk:#EDE7DD;--nightMute:#9C9285;--ease:cubic-bezier(.76,0,.24,1);--out:cubic-bezier(.22,1,.36,1)}
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+html,body{margin:0;height:100%}
+body{background:var(--paper);color:var(--ink);font-family:Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden;transition:background .9s var(--ease),color .9s var(--ease)}
+body.dark{background:var(--night);color:var(--nightInk)}
 a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;padding:0}
 img,video{display:block}
-.serif{font-family:'Shippori Mincho',serif}
-.wrap{max-width:1280px;margin:0 auto;padding:0 32px}
-header .wrap{display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between;padding-top:24px;padding-bottom:24px}
+.serif{font-family:'Shippori Mincho',serif;font-weight:400}
+/* header */
+header{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;justify-content:space-between;align-items:center;padding:22px clamp(18px,3.2vw,44px);pointer-events:none}
+header>*{pointer-events:auto}
 .logo{display:flex;align-items:center;gap:12px}
-.seal{width:34px;height:34px;background:var(--red);color:var(--bg);display:flex;align-items:center;justify-content:center;font-family:'Shippori Mincho',serif;font-size:13px;line-height:1.05;text-align:center;border-radius:3px}
-.logo b{font-family:'Shippori Mincho',serif;font-weight:400;font-size:24px;letter-spacing:.04em}
-nav{display:flex;flex-wrap:wrap;gap:26px;font-size:15px}
-nav a{padding:8px 0}
-nav a.mint{color:var(--red);font-weight:600}
-.btn{display:inline-block;padding:14px 26px;font-size:15px;font-weight:500;border-radius:2px;border:1px solid var(--ink)}
-.btn.dark{background:var(--ink);color:var(--bg)}
-.eyebrow{margin:0;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--mute)}
-h1,h2{font-family:'Shippori Mincho',serif;font-weight:400;margin:0}
-.hero{display:flex;flex-wrap:wrap;gap:56px;align-items:center;padding-top:24px;padding-bottom:80px}
-.hero .txt{flex:1 1 400px;min-width:0;display:flex;flex-direction:column;gap:26px}
-.hero h1{font-size:clamp(38px,5vw,58px);line-height:1.1}
-.hero p.lead{margin:0;font-size:18px;line-height:1.65;color:var(--soft);max-width:520px}
-.hero figure{flex:1 1 440px;min-width:0;margin:0;display:flex;flex-direction:column;gap:12px}
-.hero figure img{width:100%;height:auto;box-shadow:0 24px 60px rgba(42,38,34,.18)}
-.hero figcaption{font-size:13px;color:var(--mute)}
-.mintband{background:var(--ink);color:var(--bg)}
-.mintband .wrap{display:flex;flex-wrap:wrap;gap:52px;align-items:center;padding-top:72px;padding-bottom:72px}
-.mintband .vid{flex:0 1 380px;min-width:0;background:#1E1B18;padding:18px}
-.mintband video{width:100%;image-rendering:pixelated}
-.mintband .txt{flex:1 1 420px;min-width:0;display:flex;flex-direction:column;gap:20px}
-.mintband h2{font-size:52px}
-.mintband p{margin:0;font-size:18px;line-height:1.65;color:#D8CFC2}
-.mintband .eyebrow{color:#D9A79F}
-.mintband .btn{border-color:var(--bg)}
-.mintband .btn.light{background:var(--bg);color:var(--ink);font-weight:600}
-section.block{padding-top:72px;padding-bottom:40px;display:flex;flex-direction:column;gap:28px}
-section.block h2{font-size:42px}
-.head{display:flex;flex-wrap:wrap;gap:12px 16px;align-items:baseline;justify-content:space-between}
-.head p{margin:0;font-size:14px;color:var(--mute)}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:44px 28px}
-.card{display:flex;flex-direction:column;gap:14px;cursor:pointer}
-.card .frame{aspect-ratio:4/5;background:var(--card);display:flex;align-items:center;justify-content:center;padding:16px;overflow:hidden}
-.card .frame img{max-width:100%;max-height:100%;object-fit:contain;transition:transform .5s ease}
-.card:hover .frame img{transform:scale(1.02)}
-.card .badge{margin:0;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--red)}
-.card .t{margin:0;font-family:'Shippori Mincho',serif;font-size:22px}
-.card .t span{font-size:15px;color:var(--mute)}
-.card .l{margin:0;font-size:14px;line-height:1.55;color:#5E554C}
-.list{border-top:1px solid var(--line)}
-.row{display:flex;flex-wrap:wrap;gap:6px 24px;align-items:baseline;padding:16px 0;border-bottom:1px solid var(--line);cursor:pointer}
-.row .a{flex:0 0 210px;font-family:'Shippori Mincho',serif;font-size:19px}
-.row .b{flex:0 0 52px;font-size:14px;color:var(--mute)}
-.row .c{flex:1 1 320px;min-width:0;font-size:15px;line-height:1.5;color:var(--soft)}
-.row .e1{flex:1 1 260px;min-width:0;font-family:'Shippori Mincho',serif;font-size:19px}
-.row .e3{flex:0 0 150px;font-size:14px;color:var(--mute)}
-.row .e4{font-size:14px;color:var(--red)}
-.cards3{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
-.box{border:1px solid var(--line);padding:26px;display:flex;flex-direction:column;gap:14px}
-.box .k{margin:0;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--red)}
-.box .k.m{color:var(--mute)}
-.box .n{margin:0;font-family:'Shippori Mincho',serif;font-size:24px}
-.box p.d{margin:0;font-size:15px;line-height:1.6;color:var(--soft)}
-.box .bs{display:flex;flex-wrap:wrap;gap:10px;padding-top:4px}
-.box .btn{padding:11px 18px;font-size:14px}
-.about{display:flex;flex-wrap:wrap;gap:56px;padding-top:72px;padding-bottom:88px}
-.about h2{flex:0 1 300px;font-size:42px}
-.about .txt{flex:1 1 520px;min-width:0;display:flex;flex-direction:column;gap:18px;font-size:17px;line-height:1.75;color:var(--soft)}
-.about p{margin:0}
-.about .small{font-size:15px;color:var(--mute)}
-.about .small a{border-bottom:1px solid var(--mute)}
-footer{border-top:1px solid var(--line)}
-footer .wrap{display:flex;flex-wrap:wrap;gap:24px;justify-content:space-between;align-items:center;padding-top:40px;padding-bottom:40px;font-size:15px}
-footer .links{display:flex;flex-wrap:wrap;gap:28px}
-footer p{margin:0;color:var(--mute)}
-/* project */
-.proj{padding-top:8px;padding-bottom:80px;display:flex;flex-direction:column;gap:28px}
-.pnav{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center}
-.pnav .pn{display:flex;gap:10px;flex-wrap:wrap}
-.pnav .pn a{border:1px solid #CFC5B6;padding:9px 16px;font-size:14px;border-radius:2px}
-.pbody{display:flex;flex-wrap:wrap;gap:40px;align-items:flex-start}
-.stagecol{flex:999 1 560px;min-width:0;display:flex;flex-direction:column;gap:14px}
-.stage{background:var(--card);display:flex;align-items:center;justify-content:center;padding:20px;min-height:420px}
-.stage img,.stage video{max-width:100%;max-height:78vh;object-fit:contain}
-.stage video.px{width:min(100%,78vh);image-rendering:pixelated}
-.thumbs{display:flex;flex-wrap:wrap;gap:8px}
-.thumbs button{width:76px;height:76px;padding:0;border:0;background:var(--card);overflow:hidden;cursor:pointer;opacity:.78}
-.thumbs button img{width:100%;height:100%;object-fit:cover}
-.thumbs button.on{opacity:1;outline:2px solid var(--ink);outline-offset:2px}
-.stage{position:relative;height:min(80vh,880px);min-height:0}
-.stage img,.stage video{max-height:100%!important}
-.stage .sp,.stage .sn{position:absolute;top:50%;margin-top:-26px;width:52px;height:52px;border:0;border-radius:50%;background:rgba(42,38,34,.55);color:#F4EFE6;font-size:30px;line-height:1;cursor:pointer;z-index:2}
-.stage .sp{left:10px}.stage .sn{right:10px}
-.stage .cnt{position:absolute;left:14px;bottom:14px;font-size:12px;letter-spacing:.08em;color:var(--mute);background:rgba(244,239,230,.85);padding:4px 9px;border-radius:20px}
-.stage img{cursor:pointer;-webkit-user-select:none;user-select:none}
-.sbar{display:flex;flex-wrap:wrap;gap:14px;align-items:center}
-.sbar .btn{padding:10px 18px;font-size:14px;background:none;font-family:inherit;color:var(--ink);cursor:pointer}
-.sbar span{font-size:13px;color:var(--mute)}
-
-.stage .zoom{position:absolute;right:12px;bottom:12px;width:44px;height:44px;border:0;border-radius:50%;background:rgba(42,38,34,.72);color:#F4EFE6;font-size:20px;cursor:pointer}
-.thumbs button{position:relative}
-.thumbs button.anim::after{content:'▶';position:absolute;left:6px;bottom:5px;font-size:11px;color:#fff;text-shadow:0 0 4px #000}
-#lb{position:fixed;inset:0;z-index:100;background:#0E0D0C;display:none}
+.seal{width:32px;height:32px;background:var(--red);color:#F5F2EC;display:flex;align-items:center;justify-content:center;font-family:'Shippori Mincho',serif;font-size:12px;line-height:1.05;text-align:center;border-radius:2px}
+.logo b{font-family:'Shippori Mincho',serif;font-weight:400;font-size:22px;letter-spacing:.06em}
+nav{display:flex;gap:clamp(16px,2.4vw,34px);font-size:13px;letter-spacing:.14em;text-transform:uppercase}
+nav a{position:relative;padding:6px 0}
+nav a::after{content:'';position:absolute;left:0;right:100%;bottom:0;height:1px;background:currentColor;transition:right .5s var(--out)}
+nav a:hover::after,nav a.on::after{right:0}
+nav a.mint{color:var(--red)}
+body.dark nav a.mint{color:#E46A5E}
+/* reveal helpers */
+.mask{display:block;overflow:hidden}
+.mask>span{display:inline-block;transform:translateY(105%);transition:transform 1.1s var(--out)}
+.in .mask>span{transform:none}
+.rise{opacity:0;transform:translateY(28px);transition:opacity 1s var(--out),transform 1.1s var(--out)}
+.in .rise{opacity:1;transform:none}
+/* ===== showcase ===== */
+#show{position:fixed;inset:0;overflow:hidden;background:var(--paper)}
+#show .bg{position:absolute;inset:0;transition:background 1.4s var(--ease)}
+.slide{position:absolute;inset:0;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);align-items:center;gap:clamp(20px,4vw,70px);padding:96px clamp(18px,4vw,64px) 84px;pointer-events:none}
+.slide.cur{pointer-events:auto}
+.slide .meta{display:flex;flex-direction:column;gap:18px;align-self:end;padding-bottom:10px;min-width:0}
+.slide .num{font-size:12px;letter-spacing:.2em;color:var(--mute)}
+.slide h2{margin:0;font-family:'Shippori Mincho',serif;font-weight:400;font-size:clamp(46px,7.4vw,126px);line-height:.98;letter-spacing:-.01em}
+.slide h2 .mask>span{transition-duration:1.2s}
+.slide .sub{font-family:'Shippori Mincho',serif;font-size:clamp(18px,2vw,26px);color:var(--soft)}
+.slide .ln{margin:0;max-width:440px;font-size:16px;line-height:1.6;color:var(--soft)}
+.slide .acts{display:flex;flex-wrap:wrap;gap:12px;padding-top:6px}
+.pill{display:inline-flex;align-items:center;gap:10px;padding:13px 22px;border:1px solid currentColor;border-radius:40px;font-size:13px;letter-spacing:.12em;text-transform:uppercase;transition:background .4s,color .4s}
+.pill:hover{background:var(--ink);color:var(--paper)}
+.pill.red{background:var(--red);border-color:var(--red);color:#F5F2EC}
+.slide .art{height:100%;min-height:0;display:flex;align-items:center;justify-content:center;cursor:pointer;overflow:hidden}
+.slide .art .wrapi{height:100%;width:100%;display:flex;align-items:center;justify-content:center;clip-path:inset(100% 0 0 0);transform:translateY(12%);transition:clip-path 1.25s var(--ease),transform 1.4s var(--ease)}
+.slide .art img,.slide .art video{max-width:100%;max-height:100%;object-fit:contain;box-shadow:0 40px 90px -30px rgba(40,30,20,.45);transform:scale(1.08);transition:transform 2.2s var(--out)}
+.slide.cur .art .wrapi{clip-path:inset(0 0 0 0);transform:none}
+.slide.cur .art img,.slide.cur .art video{transform:none}
+.slide.gone .art .wrapi{clip-path:inset(0 0 100% 0);transform:translateY(-10%)}
+.slide .art video.px{image-rendering:pixelated;height:100%;width:auto;aspect-ratio:1}
+.slide.cur{z-index:2}
+.slide:not(.cur):not(.gone){visibility:hidden}
+.ctl{position:fixed;z-index:40;left:clamp(18px,4vw,64px);right:clamp(18px,4vw,64px);bottom:26px;display:flex;align-items:center;gap:22px;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--mute)}
+.ctl .bar{flex:1;height:1px;background:rgba(27,25,23,.15);position:relative;overflow:hidden}
+.ctl .bar i{position:absolute;inset:0;background:var(--ink);transform-origin:left;transform:scaleX(0)}
+.ctl button{display:flex;align-items:center;gap:8px;letter-spacing:.18em;text-transform:uppercase;font-size:12px;color:var(--ink)}
+.ctl .arw{width:40px;height:40px;border:1px solid rgba(27,25,23,.25);border-radius:50%;justify-content:center;font-size:16px;letter-spacing:0}
+.ctl .arw:hover{background:var(--ink);color:var(--paper)}
+.hint{position:fixed;z-index:40;right:clamp(18px,4vw,64px);top:50%;transform:translateY(-50%) rotate(90deg);transform-origin:right center;font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--mute)}
+/* ===== wipe (angular) ===== */
+#wipe{position:fixed;inset:0;z-index:45;background:var(--night);clip-path:polygon(100% 100%,100% 100%,100% 100%,100% 100%);pointer-events:none}
+#wipe.go{animation:wipe 1.15s var(--ease) forwards}
+#wipe.back{animation:wipeb 1s var(--ease) forwards}
+@keyframes wipe{0%{clip-path:polygon(100% 100%,100% 100%,100% 100%,100% 100%)}55%{clip-path:polygon(0 100%,100% 10%,100% 100%,0 100%)}100%{clip-path:polygon(0 0,100% 0,100% 100%,0 100%)}}
+@keyframes wipeb{0%{clip-path:polygon(0 0,100% 0,100% 100%,0 100%);background:var(--night)}100%{clip-path:polygon(0 0,100% 0,100% 0,0 0);background:var(--night)}}
+/* ===== project ===== */
+#proj{position:relative;min-height:100vh;padding:96px clamp(18px,4vw,64px) 60px;display:none}
+body.dark #proj{display:block}
+.pgrid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:clamp(24px,4.5vw,80px);align-items:start}
+.stage{position:sticky;top:96px;height:calc(100vh - 210px);min-height:360px;display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:zoom-in}
+.stage .f{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;clip-path:inset(100% 0 0 0);transition:clip-path 1.1s var(--ease)}
+.stage .f.on{clip-path:inset(0 0 0 0)}
+.stage .f.off{clip-path:inset(0 0 100% 0)}
+.stage .f img,.stage .f video{max-width:100%;max-height:100%;object-fit:contain;transform:scale(1.06);transition:transform 1.8s var(--out)}
+.stage .f.on img,.stage .f.on video{transform:none}
+.stage .f video.px{image-rendering:pixelated;height:100%;width:auto;aspect-ratio:1}
+.sctl{display:flex;align-items:center;gap:18px;margin-top:16px;font-size:12px;letter-spacing:.18em;color:var(--nightMute)}
+.sctl .arw{width:42px;height:42px;border:1px solid rgba(237,231,221,.3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--nightInk)}
+.sctl .arw:hover{background:var(--nightInk);color:var(--night)}
+.sctl .play{margin-left:auto;display:flex;gap:10px;align-items:center;padding:11px 18px;border:1px solid rgba(237,231,221,.35);border-radius:40px;color:var(--nightInk);letter-spacing:.14em;text-transform:uppercase;font-size:12px}
+.sctl .play:hover{background:var(--nightInk);color:var(--night)}
+.strip{display:flex;gap:8px;margin-top:16px;overflow-x:auto;padding-bottom:6px;scrollbar-width:none}
+.strip::-webkit-scrollbar{display:none}
+.strip button{flex:0 0 auto;width:64px;height:80px;opacity:.38;transition:opacity .4s;position:relative}
+.strip button.on,.strip button:hover{opacity:1}
+.strip img{width:100%;height:100%;object-fit:cover}
+.strip button.anim::after{content:'▶';position:absolute;left:5px;bottom:4px;font-size:10px;color:#fff;text-shadow:0 0 4px #000}
+.ptxt{display:flex;flex-direction:column;gap:22px;padding-top:6px}
+.ptxt .yr{font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:#E46A5E}
+.ptxt h1{margin:0;font-family:'Shippori Mincho',serif;font-weight:400;font-size:clamp(48px,6.4vw,112px);line-height:.98;letter-spacing:-.01em}
+.ptxt .sub{font-family:'Shippori Mincho',serif;font-size:24px;color:var(--nightMute)}
+.ptxt .ln{margin:0;font-family:'Shippori Mincho',serif;font-size:clamp(20px,1.9vw,26px);line-height:1.45}
+.ptxt .info p{margin:0 0 18px;font-size:16px;line-height:1.75;color:#CFC6B9;font-weight:300}
+.ptxt .tech{font-size:12px!important;letter-spacing:.16em;text-transform:uppercase;color:var(--nightMute)!important;border-top:1px solid rgba(237,231,221,.15);padding-top:16px;font-weight:400!important}
+.ptxt .acts{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.ptxt .pill:hover{background:var(--nightInk);color:var(--night)}
+.ptxt .note{font-size:13px;color:var(--nightMute)}
+.close{position:fixed;z-index:55;top:16px;right:clamp(12px,3vw,40px);width:48px;height:48px;border-radius:50%;border:1px solid rgba(237,231,221,.35);display:none;align-items:center;justify-content:center;font-size:22px;color:var(--nightInk);background:rgba(14,13,12,.4);backdrop-filter:blur(6px)}
+body.dark .close{display:flex}
+body.dark header nav{display:none}
+.nextp{display:block;margin-top:90px;padding-top:28px;border-top:1px solid rgba(237,231,221,.15)}
+.nextp small{font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--nightMute)}
+.nextp b{display:block;font-family:'Shippori Mincho',serif;font-weight:400;font-size:clamp(40px,6vw,96px);line-height:1.05;transition:transform .8s var(--out)}
+.nextp:hover b{transform:translateX(18px)}
+/* ===== index ===== */
+#index{display:none;padding:120px clamp(18px,4vw,64px) 0}
+body.idx #index{display:block}
+body.idx #show,body.idx .ctl,body.idx .hint,body.dark #show,body.dark .ctl,body.dark .hint{display:none}
+.ih{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:end;gap:16px;padding-bottom:28px;border-bottom:1px solid var(--ink)}
+.ih h1{margin:0;font-family:'Shippori Mincho',serif;font-weight:400;font-size:clamp(56px,9vw,150px);line-height:.9}
+.ih p{margin:0;max-width:420px;font-size:15px;line-height:1.6;color:var(--soft)}
+.irow{display:grid;grid-template-columns:44px 74px minmax(0,1.2fr) 70px minmax(0,1.6fr);gap:18px;align-items:center;padding:16px 0;border-bottom:1px solid rgba(27,25,23,.14);transition:padding .5s var(--out),background .5s}
+.irow:hover{padding-left:14px;background:rgba(255,255,255,.5)}
+.irow .n{font-size:12px;letter-spacing:.16em;color:var(--mute)}
+.irow img{width:74px;height:92px;object-fit:cover}
+.irow .t{font-family:'Shippori Mincho',serif;font-size:clamp(24px,2.8vw,40px);line-height:1.05}
+.irow .t span{display:block;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--red);font-family:Inter,sans-serif;margin-top:6px}
+.irow .y{font-size:14px;color:var(--mute)}
+.irow .l{font-size:15px;line-height:1.55;color:var(--soft)}
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .9s var(--out),transform 1s var(--out)}
+.reveal.vis{opacity:1;transform:none}
+.sec{padding-top:110px}
+.sec h2{margin:0 0 26px;font-family:'Shippori Mincho',serif;font-weight:400;font-size:clamp(40px,5vw,72px);line-height:1}
+.erow{display:grid;grid-template-columns:minmax(0,1fr) 70px 160px 70px;gap:16px;padding:15px 0;border-bottom:1px solid rgba(27,25,23,.14);align-items:baseline}
+.erow .t{font-family:'Shippori Mincho',serif;font-size:21px}
+.erow span{font-size:14px;color:var(--mute)}
+.erow .go{color:var(--red)}
+.sec .lead{max-width:640px;font-size:15px;line-height:1.65;color:var(--soft);margin:0 0 24px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:18px}
+.box{border:1px solid rgba(27,25,23,.2);padding:28px;display:flex;flex-direction:column;gap:14px}
+.box .k{margin:0;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--red)}
+.box .nm{margin:0;font-family:'Shippori Mincho',serif;font-size:28px}
+.box p{margin:0;font-size:15px;line-height:1.6;color:var(--soft)}
+.box .bs{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}
+.about{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);gap:40px}
+.about .tx p{margin:0 0 18px;font-size:clamp(18px,1.7vw,22px);line-height:1.6;font-family:'Shippori Mincho',serif}
+.about .tx p.s{font-family:Inter,sans-serif;font-size:15px;color:var(--mute)}
+footer{margin-top:120px;padding:34px 0 40px;border-top:1px solid var(--ink);display:flex;flex-wrap:wrap;justify-content:space-between;gap:18px;font-size:13px;letter-spacing:.12em;text-transform:uppercase}
+footer .lk{display:flex;gap:26px;flex-wrap:wrap}
+/* ===== lightbox / slideshow ===== */
+#lb{position:fixed;inset:0;z-index:100;background:#080707;display:none}
 #lb.open{display:block}
-#lb .lbin{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:12px}
-#lb .lbin img,#lb .lbin video{max-width:100%;max-height:100%;object-fit:contain}
-#lb .lbin video.px{width:min(100%,100vh);image-rendering:pixelated}
-#lb button{position:absolute;border:0;background:rgba(255,255,255,.12);color:#F4EFE6;width:52px;height:52px;border-radius:50%;font-size:30px;line-height:1;cursor:pointer}
-#lb .lbx{top:16px;right:16px}
-#lb .lbp{left:16px;top:50%;margin-top:-26px}
-#lb .lbn{right:16px;top:50%;margin-top:-26px}
-#lb .lbin{position:absolute;inset:0;padding:0}
-#lb .lbf{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:24px 24px 64px;opacity:0;transition:opacity .9s ease}
-#lb .lbf.in{opacity:1}#lb .lbf.out{opacity:0}
-#lb .lbf img,#lb .lbf video{max-width:100%;max-height:100%;object-fit:contain;box-shadow:0 30px 80px rgba(0,0,0,.55)}
+#lb .lbf{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:28px 28px 72px;opacity:0;transition:opacity 1s ease}
+#lb .lbf.in{opacity:1}
+#lb .lbf.out{opacity:0}
+#lb .lbf img,#lb .lbf video{max-width:100%;max-height:100%;object-fit:contain;box-shadow:0 30px 80px rgba(0,0,0,.6)}
 #lb .lbf.in img{animation:kb 7s ease-out both}
-@keyframes kb{from{transform:scale(1.035)}to{transform:scale(1)}}
-#lb .lbf video.px{width:min(100%,calc(100vh - 88px));image-rendering:pixelated}
-#lb .lbcap{position:absolute;left:0;right:0;bottom:18px;display:flex;justify-content:center;gap:18px;align-items:baseline;color:#CFC6B8;font-size:13px;letter-spacing:.06em;pointer-events:none}
-#lb .lbcap b{font-family:'Shippori Mincho',serif;font-weight:400;font-size:19px;color:#F4EFE6;letter-spacing:.02em}
-#lb.auto .lbp,#lb.auto .lbn,#lb.auto .lbx{opacity:0;pointer-events:none}
-#lb.auto{cursor:pointer}
-#lb .lbc{position:absolute;left:0;right:0;bottom:14px;margin:0;text-align:center;color:#A99E90;font-size:13px}
-.thumbs button{width:88px;height:88px}
-.thumbs button.play{width:auto;padding:0 16px;font:500 13px Inter,sans-serif;color:var(--ink)}
-aside{flex:1 1 320px;min-width:0;display:flex;flex-direction:column;gap:18px}
-aside .yr{margin:0;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--red)}
-aside h1{font-size:46px;line-height:1.1}
-aside .sub{margin:0;font-family:'Shippori Mincho',serif;font-size:18px;color:var(--mute)}
-aside .line{margin:0;font-size:18px;line-height:1.6}
-aside .acts{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
-aside .acts .btn{padding:12px 20px}
-aside .acts .btn.red{background:var(--red);border-color:var(--red);color:var(--bg);font-weight:600}
-aside .acts span{font-size:13px;color:var(--mute)}
-.info{display:none;flex-direction:column;gap:14px;border-top:1px solid var(--line);padding-top:18px}
-.info.open{display:flex}
-.info p{margin:0;font-size:15.5px;line-height:1.7;color:var(--soft)}
-.info p.tech{font-size:13px;line-height:1.6;color:var(--mute);border-top:1px solid var(--line);padding-top:14px;margin-top:6px}
-aside .count{margin:0;font-size:13px;color:var(--mute)}
-@media (max-width:600px){.wrap{padding:0 20px}.mintband h2{font-size:40px}section.block h2,.about h2{font-size:34px}aside h1{font-size:38px}}
+@keyframes kb{from{transform:scale(1.04)}to{transform:none}}
+#lb .lbf video.px{width:min(100%,calc(100vh - 100px));image-rendering:pixelated}
+#lb .cap{position:absolute;left:0;right:0;bottom:22px;display:flex;justify-content:center;gap:18px;align-items:baseline;color:#A89E91;font-size:12px;letter-spacing:.18em;pointer-events:none}
+#lb .cap b{font-family:'Shippori Mincho',serif;font-weight:400;font-size:21px;letter-spacing:.02em;color:#F1EBE1}
+#lb .b{position:absolute;width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,.1);color:#F1EBE1;font-size:26px;display:flex;align-items:center;justify-content:center}
+#lb .x{top:16px;right:16px}#lb .p{left:16px;top:50%;margin-top:-26px}#lb .nx{right:16px;top:50%;margin-top:-26px}
+#lb.auto .b{opacity:0;pointer-events:none}
+/* ===== responsive ===== */
+@media (max-width:900px),(orientation:portrait){
+ .slide{grid-template-columns:1fr;grid-template-rows:minmax(0,1fr) auto;padding:84px 20px 80px;gap:18px}
+ .slide .art{order:1}
+ .slide .meta{order:2;align-self:start;gap:10px}
+ .slide .ln{display:none}
+ .slide h2{font-size:clamp(40px,10vw,84px)}
+ .hint{display:none}
+ .pgrid{grid-template-columns:1fr}
+ .stage{position:relative;top:0;height:64vh}
+ .irow{grid-template-columns:34px 60px minmax(0,1fr) 50px}
+ .irow .l{grid-column:3/5}
+ .irow img{width:60px;height:76px}
+ .about{grid-template-columns:1fr}
+ .erow{grid-template-columns:minmax(0,1fr) 50px 70px}
+ .erow .ed{display:none}
+}
+@media (max-width:600px){nav{gap:14px;font-size:11px}.logo b{display:none}}
 </style>
 </head>
 <body>
-<header><div class="wrap">
-<a class="logo" href="#"><span class="seal">神<br>秘</span><b>Chista</b></a>
-<nav><a class="mint" href="#mint">Mint</a><a href="#works">Works</a><a href="#index">Index</a><a href="#collect">Collect</a><a href="#about">About</a><a href="https://x.com/chistaai">X</a></nav>
-</div></header>
-<main id="app"></main>
-<footer><div class="wrap">
-<div class="links"><a href="https://x.com/chistaai">X @chistaai</a><a href="https://seeded.art/profile/tz1dwbtWaHdFFiomDBG65XYw1VAfiHtrviXz">seeded.art</a><a href="https://objkt.com/profile/tz1dwbtWaHdFFiomDBG65XYw1VAfiHtrviXz/created">objkt</a><a href="https://opensea.io/collection/bonjoy">OpenSea</a></div>
-<p>© 2026 Chista · chista.design</p>
-</div></footer>
+<header><a class="logo" href="#"><span class="seal">神<br>秘</span><b>Chista</b></a>
+<nav><a href="#" data-r="show">Works</a><a href="#index" data-r="index">Index</a><a href="#index/about" data-r="about">About</a><a class="mint" href="#p/bonjoy">Mint</a></nav></header>
+<button class="close" id="close" aria-label="Back to works">×</button>
+<main>
+<section id="show" aria-label="Works"><div class="bg" id="bg"></div></section>
+<div class="ctl" id="ctl"><button class="arw" id="prev" aria-label="Previous work">↑</button><button class="arw" id="next" aria-label="Next work">↓</button><span id="cnt">01 / 18</span><div class="bar"><i id="bar"></i></div><button id="pause">Pause</button></div>
+<div class="hint">Scroll · swipe · tap a work</div>
+<div id="wipe"></div>
+<section id="proj"></section>
+<section id="index"></section>
+</main>
+<div id="lb"><div class="lbin"></div><button class="b x" aria-label="Close">×</button><button class="b p" aria-label="Previous">‹</button><button class="b nx" aria-label="Next">›</button><div class="cap"><b></b><span></span></div></div>
 <script>
-const DATA = [{"id": "bonjoy", "title": "BONJOY", "sub": "", "year": "2026", "line": "999 pixel skulls on Base. Dead, and doing fine.", "info": ["BONJOY is 999 pixel skulls by Chista, generated on Base. Each skull is decided at mint by a seed written on chain in the same transaction. Nobody, the artist included, knows which skull a mint will bring.", "Every piece is a six-second loop in which a skull might blink, burp, let its brain slide out of its eyes, or carry a sleeping cat."], "tech": "Pure JavaScript · no libraries", "imgs": ["img/bj1.jpg", "img/bj3.jpg", "img/bj12.jpg", "img/bj17.jpg", "img/bj6.jpg", "img/bj4.jpg", "img/bj5.jpg", "img/bj0.jpg", "img/bj2.jpg", "img/bj7.jpg", "img/bj8.jpg", "img/bj9.jpg", "img/bj10.jpg", "img/bj11.jpg", "img/bj13.jpg", "img/bj14.jpg", "img/bj15.jpg", "img/bj16.jpg", "img/bj18.jpg", "img/bj19.jpg", "img/bj20.jpg", "img/bj21.jpg", "img/bj23.jpg", "img/bj24.jpg", "img/bj25.jpg", "img/bj26.jpg"], "vids": ["img/bj1.mp4", "img/bj3.mp4", "img/bj12.mp4", "img/bj17.mp4", "img/bj6.mp4", "img/bj4.mp4", "img/bj5.mp4", "img/bj0.mp4", "img/bj2.mp4", "img/bj7.mp4", "img/bj8.mp4", "img/bj9.mp4", "img/bj10.mp4", "img/bj11.mp4", "img/bj13.mp4", "img/bj14.mp4", "img/bj15.mp4", "img/bj16.mp4", "img/bj18.mp4", "img/bj19.mp4", "img/bj20.mp4", "img/bj21.mp4", "img/bj23.mp4", "img/bj24.mp4", "img/bj25.mp4", "img/bj26.mp4"], "video": "", "released": true, "isNew": false, "ext": null}, {"id": "allaprima", "title": "Alla Prima", "sub": "", "year": "2026", "line": "Checkered cloth over hidden volumes, painted in oil, layer by layer. Every seed is a finished canvas.", "info": ["Each work begins as a three-dimensional scene: checkered cloth draped over hidden forms, then shifted, pulled and cut apart until only the painting is left.", "The oil engine was written specially for this work. It paints the way oil painters did, session by session, from a thin underpainting to glazes, thick lights and varnish. The brush runs dry, drags wet paint and moves shape by shape across the canvas, like a painter's hand."], "tech": "JavaScript · WebGL2 · custom engine built for painting · no libraries", "imgs": ["img/ap-7777p.jpg", "img/ap-1588p.jpg", "img/ap-1234p.jpg", "img/ap-11111p.jpg", "img/ap-3317p.jpg", "img/ap-4096p.jpg", "img/ap-50505p.jpg", "img/ap-311p.jpg", "img/ap-6262p.jpg", "img/ap-42p.jpg", "img/ap-31415p.jpg", "img/ap-2401p.jpg", "img/ap-905p.jpg", "img/ap-23456p.jpg", "img/ap-8123p.jpg"], "vids": ["img/ap-7777p.mp4", "", "", "", "", "", "", "", "", "", "", "", "", "", ""], "video": "img/ap-7777p.mp4", "released": false, "isNew": true, "ext": null}, {"id": "divoni", "title": "Divoni", "sub": "ディヴォニ", "year": "2026", "line": "Legendary Japanese warriors built from my own drawings, painted in watercolour on aged washi.", "info": ["In Japanese painting the oni, demons, ogres and fierce guardians, have been drawn for centuries, and almost every culture in the world has painted its own: the div, the demon, the monster at the edge of the map. Divoni brings these figures together in one face. Its name joins div and oni, and it gives that old image a new form: a generative portrait, born on the blockchain.", "Divoni is built from more than a hundred of my hand drawings. Forty-eight full warrior designs are cut into seven parts, crest, halo, second halo, face, eyes, beard and armour, and every part can come from any design, from its left or its right half. The code chooses, mirrors, scales and joins them, so the number of possible warriors runs into the trillions. None of them existed before, but every line in them was drawn by hand.", "Everything is fully generative and fully code: the drawing, the colour, the watercolour and the paper. The watercolour engine was written specially for this work. Pigment flows where the paper is wet, gathers at the drying edge and blooms, but stops at the eyes so the gaze stays sharp. Each sheet is mounted on aged Japanese paper."], "tech": "Pure JavaScript · WebGL2 · custom watercolour engine · no libraries", "imgs": ["img/divoni-0.jpg", "img/divoni-n1.jpg", "img/divoni-n7.jpg", "img/divoni-n6.jpg", "img/divoni-n3.jpg", "img/divoni-n4.jpg", "img/divoni-n5.jpg", "img/divoni-3.jpg", "img/divoni-2.jpg", "img/divoni-n2.jpg"], "vids": ["", "", "", "", "", "", "", "", "", ""], "video": "", "released": false, "isNew": false, "ext": null}, {"id": "cubist", "title": "Cube Girls", "sub": "", "year": "2026", "line": "One seed, one woman: cubist portraits grown from a decision tree and painted in wet-on-wet pastel.", "info": ["The seated woman is one of the great subjects of Cubism. Cube Girls returns to her in my own handwriting, with rules drawn from my cubist pastel works. Every work holds one woman, close up, at the shoulders, half-length, seated, in profile, seen from above or rising from below, and she dissolves into the same broken geometry as the room around her.", "She is not assembled the way a profile picture is, by stacking layers. A decision tree builds her, choice by choice: the framing decides the pose, the pose decides the hands, the look decides the sleeves, the dress decides what may sit around the neck. Face, eyes, brows, nose, mouth, hair, hat, collar, jewellery, flowers, the room and the art on its wall, more than thirty traits in all, each depending on the ones before it. One half of a face may come from one type and the other half from another. That is why no two works are alike: they differ in kind, not only in colour.", "Rare branches of the tree lead further: women drawn after African masks, gowns and grounds of Klimt gold, hands that make a heart, cubist smiles, pure line drawings and black ink cuts across every plane. Every ground, plain or full of objects, is built as a finished cubist painting in its own right.", "The pastel engine was written specially for this work, and it paints as a pastel artist does. Colour is laid wet on wet, so neighbouring planes bleed softly into each other; pencil hatching runs over the colour in layers; the pigment catches on the fibres of the paper like felt, and the frame takes its colour from each palette. Form comes from colour, never from outline."], "tech": "Pure JavaScript · Canvas & WebGL · custom wet-on-wet pastel engine · no libraries", "imgs": ["img/cubist-6.jpg", "img/cubist-2.jpg", "img/cubist-n0.jpg", "img/cubist-4.jpg", "img/cubist-n2.jpg", "img/cubist-7.jpg", "img/cubist-n3.jpg", "img/cubist-n8.jpg", "img/cubist-1.jpg", "img/cubist-n5.jpg", "img/cubist-n11.jpg", "img/cubist-8.jpg", "img/cubist-n1.jpg", "img/cubist-n6.jpg", "img/cubist-9.jpg"], "vids": ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""], "video": "", "released": false, "isNew": false, "ext": null}, {"id": "cubegirls", "title": "Cube Girls: Études", "sub": "", "year": "2026", "line": "The same women before the paint: the artist's working sheet, with the first underdrawing, the decisions, the notes and the small studies still on it.", "info": ["Every artist keeps notebooks. Before a portrait is painted, it lives there first: a first sketch, a few decisions, a study, notes in the margin. Cube Girls: Études comes from those notebooks. It is the second face of Cube Girls, with the same decision tree, the same women and the same cubist cuts, shown at the moment before painting, as a page from the artist's book.", "Under the ink lies the first underdrawing of the woman, in a shaky pencil line, taken from the figure before its cubist cuts, so the straight cut lines still show beneath the shifted ink. Some of the early lines survive; others have been rubbed out, because the decision changed once the work was carried out. Where there is room, a small study of part of the work sits beside it, drawn again at a smaller size.", "Around her are the artist's notes, written, struck through, erased and written again, and they are deliberately hard to read. In my own notebooks the notes I write about a drawing are always like this; sometimes even I cannot read them, or understand in that moment what I meant. Slowly the way becomes clear, and the work is finished. These pages keep that moment, before it is clear.", "The sheet is an old one, and it has lived: folds, creases, foxing, tape, worn corners and the grain of the paper. The ink and pencil engine was written specially for this work."], "tech": "Pure JavaScript · Canvas · custom ink, pencil and paper engine · no libraries", "imgs": ["img/cubegirls-1.jpg", "img/cubegirls-n1.jpg", "img/cubegirls-n9.jpg", "img/cubegirls-n10.jpg", "img/cubegirls-n5.jpg", "img/cubegirls-2.jpg", "img/cubegirls-n6.jpg", "img/cubegirls-n4.jpg", "img/cubegirls-4.jpg", "img/cubegirls-n7.jpg", "img/cubegirls-n2.jpg", "img/cubegirls-n11.jpg"], "vids": ["", "", "", "", "", "", "", "", "", "", "", ""], "video": "", "released": false, "isNew": false, "ext": null}, {"id": "boro", "title": "Boro", "sub": "ぼろ 2026", "year": "2026", "line": "Generative embroidery: scraps of cloth gathered and stitched, and the cloth can be turned over to see its back.", "info": ["Nothing in boro is thrown away. A torn sleeve, an old kimono, a scrap of indigo: each one is given a new life inside another cloth, and keeps working. The word comes from the Japanese boroboro, something tattered or mended. Every piece in this series is made the same way, from fragments that carry a past, joined into something that has never existed before.", "Boro is the Japanese tradition of mending worn cloth, patch over patch, until the repairs become the beauty of the fabric. Each work gathers patches of linen, kasuri and printed fabrics and joins them with running stitches, and you watch the piece being sewn, stitch by stitch.", "The Back view turns the textile over to show the reverse of the stitching, and the Light view holds it up against the light. Rare pieces leave the patchwork behind: a koi pond where one great fish is pieced from scraps, kintsugi gold, aizome indigo, imperial blue and gin silver."], "tech": "Pure JavaScript · Canvas 2D & WebGL · custom thread and fibre engine · no libraries", "imgs": ["img/boro-h0.jpg", "img/boro-h9.jpg", "img/boro-h3.jpg", "img/boro-h4.jpg", "img/boro-h7.jpg", "img/boro-h11.jpg", "img/boro-h13.jpg", "img/boro-h15.jpg", "img/boro-1.jpg"], "vids": ["", "", "", "", "", "", "", "", ""], "video": "img/boro-anim.mp4", "released": false, "isNew": false, "ext": null}, {"id": "simorgh", "title": "Simorgh", "sub": "", "year": "2026", "line": "Abstract paintings of the mythical bird: ribbons, feathers and eyes inside the pages of an old Persian book.", "info": ["In Attar's Conference of the Birds, thousands of birds set out to find the Simorgh, their king. Only thirty reach the end, and there they find that the Simorgh is themselves: si morgh, thirty birds. In this series she is never shown whole. She appears as a wing, a head, a flower or a tree, each work one glimpse of her.", "Simorgh is a modern painting that borrows from the old Persian art of the book. The trees are the trees of Persian miniatures. The frames are the page layouts of old Persian manuscripts, with their gold leaf and fields of stippled dots. And the bird has a logic of her own: wherever a wing reaches, the frame bends and breaks around it.", "She is built from long painted ribbons, teardrop eyes and feather patterns, following the golden spiral. Most works are in natural colour; rare ones turn psychedelic, or negative, the whole painting in a single tinted tone."], "tech": "Pure JavaScript · Canvas · custom painting engine · no libraries", "imgs": ["img/simorgh-n1.jpg", "img/simorgh-n101.jpg", "img/simorgh-n105.jpg", "img/simorgh-1.jpg", "img/simorgh-n2.jpg", "img/simorgh-n103.jpg", "img/simorgh-n3.jpg", "img/simorgh-n106.jpg", "img/simorgh-n8.jpg", "img/simorgh-n100.jpg", "img/simorgh-n0.jpg", "img/simorgh-n7.jpg", "img/simorgh-n112.jpg"], "vids": ["", "", "", "", "", "", "", "", "", "", "", "", ""], "video": "", "released": false, "isNew": false, "ext": null}, {"id": "niwa", "title": "Niwa", "sub": "庭", "year": "2026", "line": "A Japanese garden built layer by layer, from the grass at your feet to the mountain on the horizon.", "info": ["A Japanese garden is made to be walked through slowly. It hides as much as it shows, and every turn of the path opens a new view. Niwa is built the same way, in layers, from near to far.", "It begins with meadow grass and flowers. Then a pond, with koi moving in it. Further on, bonsai and pines, and a bridge over the water. Sometimes women in kimono walk in the garden. Japanese houses rise against the sky, trees show behind the fences, and far away there is a mountain, sometimes with the sun above it. The garden keeps going, as far as the eye can see, a world with room left to discover.", "Every seed chooses where to stand and how to look: at the koi pond, in a bamboo grove, among the reeds, before a temple or under a sakura bough. Everything is drawn in one even line. Stones are cut into faceted planes and hatched, seasons bring rain, snow, petals and passing birds, and the same drawing can be printed in sumi black, black and gold, navy, dark green, watercolour or risograph."], "tech": "Pure JavaScript · custom vector line engine · no libraries", "imgs": ["img/niwa-p1.jpg", "img/niwa-p4.jpg", "img/niwa-p2.jpg", "img/niwa-p6.jpg", "img/niwa-p9.jpg", "img/niwa-p10.jpg", "img/niwa-p12.jpg", "img/niwa-p8.jpg", "img/niwa-p3.jpg", "img/niwa-p11.jpg", "img/niwa-p7.jpg"], "vids": ["", "", "", "", "", "", "", "", "", "", ""], "video": "", "released": false, "isNew": false, "ext": null}, {"id": "gunta", "title": "Gunta Rug", "sub": "Square", "year": "2026", "line": "Square deep-pile rugs, woven in yarn and rendered knot by knot.", "info": ["Gunta is named after Gunta Stölzl, master of the Bauhaus weaving workshop, and it sits between two traditions: the geometric rugs of the Bauhaus and the free, hand-knotted gabbeh of the Persian nomads. The grid gives the order, the hand gives the life: rows swell, thin and drift, and colours shift from knot to knot.", "Each rug has a border, an inner frame of small forms, and a field that follows one of two grammars: stepped bands of colour, or a mirrored check of wide fields and narrow strips. Colour comes from forty yarn palettes.", "The pile is drawn by an engine written specially for this work. Every knot is a bundle of fibres that bends with the nap, narrows at the tip and splits into finer strands. Deep fibres fall into shadow, the tips catch a soft sheen, and the rug feels thick enough to touch."], "tech": "Pure JavaScript · WebGL · custom deep-pile engine · no libraries", "imgs": ["img/gunta-1.jpg", "img/gunta-2.jpg", "img/gunta-3.jpg", "img/gunta-4.jpg", "img/gunta-5.jpg", "img/gunta-6.jpg", "img/gunta-7.jpg", "img/gunta-8.jpg"], "vids": ["", "", "", "", "", "", "", ""], "video": "", "released": false, "isNew": false, "ext": null}, {"id": "ryuka", "title": "Ryūka", "sub": "竜火", "year": "2026", "line": "Geometric watercolours in which a legendary beast rises out of the painting and turns its fire on the city.", "info": ["Ryūka means dragon fire. In Japanese art the dragon and the lion-dog are guardians: for centuries they watched over temples, cities and people. In Ryūka they have turned. The forests, rivers and mountains they once protected have been poisoned and cleared, and the guardians have come down from the painting to answer for them. They rise out of the same squares, circles and patchwork the sheet is made of, and breathe fire on the great city beside them and on its small towns. It is not rage without reason: it is nature, grieving, taking back its ground.", "Thirty-two of my paintings gave eleven ways to compose a sheet and the palettes it is painted in. The beasts are dressed in traditional Japanese patterns, seigaiha, asanoha, kikkō, uroko and more, and the fire comes from inside the mouth.", "The watercolour engine was written specially for this work. Each part has its own wetness: a wet ground, very wet masses and dry, sharp objects, and random fractures slide bands and blocks out of place."], "tech": "Pure JavaScript · WebGL2 · custom watercolour engine · no libraries", "imgs": ["img/ryuka-2.jpg", "img/ryuka-n4.jpg", "img/ryuka-5.jpg", "img/ryuka-n2.jpg", "img/ryuka-n6.jpg", "img/ryuka-n1.jpg", "img/ryuka-n5.jpg", "img/ryuka-n0.jpg", "img/ryuka-3.jpg", "img/ryuka-n7.jpg", "img/ryuka-n11.jpg", "img/ryuka-n8.jpg", "img/ryuka-6.jpg", "img/ryuka-n3.jpg"], "vids": ["", "", "", "", "", "", "", "", "", "", "", "", "", ""], "video": "", "released": false, "isNew": false, "ext": null}, {"id": "hanabi", "title": "Hanabi", "sub": "花火", "year": "2026", "line": "Fire flowers: three-dimensional blooms drawn in ink on a broken ground, each with its light still spreading behind it.", "info": ["Hanabi means fireworks; word for word, fire flowers. A firework is a flower that blooms in the dark sky, and a flower is a firework that opens slowly on the ground. Both live a single bright moment, and then they are gone. Each sheet holds that moment: the bloom at its fullest, its colour still burning outward behind it like a burst over the summer river.", "Every flower is built as a true three-dimensional form from its own botanical measurements, then turned into ink: stipple, dashes, flowing lines or engraved hatching. The ground is a cubist partition taken from my own paintings, broken like glass around the light.", "The ink and watercolour engine was written specially for this work. Each sheet takes its own mood: day, dawn, autumn, night, misty rain, winter snow, sumi ink with a single red, or kintsugi gold running through the seams."], "tech": "Pure JavaScript · WebGL2 · custom ink and watercolour engine · no libraries", "imgs": ["img/hanabi-n110.jpg", "img/hanabi-n101.jpg", "img/hanabi-n104.jpg", "img/hanabi-n103.jpg", "img/hanabi-n108.jpg", "img/hanabi-n100.jpg", "img/hanabi-n105.jpg", "img/hanabi-n106.jpg", "img/hanabi-n2.jpg", "img/hanabi-n111.jpg", "img/hanabi-n109.jpg", "img/hanabi-n4.jpg", "img/hanabi-n112.jpg", "img/hanabi-n7.jpg", "img/hanabi-n10.jpg", "img/hanabi-n3.jpg"], "vids": ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""], "video": "", "released": false, "isNew": false, "ext": null}, {"id": "mugen", "title": "Mugen", "sub": "夢幻", "year": "2026", "line": "The shapes that come just before sleep: knots, snakes, spirals and braids, carrying you into a dream.", "info": ["Mugen means dream and illusion. It paints the moment just before sleep, when your eyes grow heavy and shapes begin to arrive behind your eyelids: coils, knots, braided strands, colours that have no name. They are not the dream yet. They are the roads into it. You climb onto a snake, onto one of these strange forms, and it carries you down into your memories and further, into the dream, until you come to yourself lost in a winding forest of colour, already caught in sleep.", "Knots, coiled snakes, spirals, braided hair and ribbed cages drift among half-remembered things, an umbrella, a lantern, a paper carp, a circle of ink, each dressed in its own pattern. Some sheets gather everything into a single island floating on bare paper; others come close and fill the whole sheet, the way a dream closes around you.", "The paint and paper engine was written specially for this work. The paper takes its colour and relief from real sheets, with wetness, salt and grain."], "tech": "Pure JavaScript · WebGL2 · custom paint and paper engine · no libraries", "imgs": ["img/mugen-1.jpg", "img/mugen-4.jpg", "img/mugen-6.jpg", "img/mugen-3.jpg", "img/mugen-7.jpg", "img/mugen-13.jpg", "img/mugen-8.jpg", "img/mugen-11.jpg", "img/mugen-10.jpg", "img/mugen-2.jpg"], "vids": ["", "", "", "", "", "", "", "", "", ""], "video": "", "released": false, "isNew": false, "ext": null}, {"id": "deepgarden", "title": "Deep Garden", "sub": "", "year": "2026", "line": "An underwater garden of creatures born from a genome, in watercolour and the colours of late Kandinsky.", "info": ["Deep Garden is not a collage. Nothing here is a head taken from one drawing and a tail from another. It has a genome. I made 255 drawings of sea creatures, measured every one of them, and reduced all their differences to 28 genes. From those genes the work grows creatures of its own, and not one of them looks like any of the 255. The drawings gave their genome; the creatures are born from it.", "Because they are born, they inherit. Parents pass their genes to their young, and sometimes a whole family appears, mother, father and children swimming together, alike in the way relatives are alike. Even the patterns inside their bodies, cells, spots, stripes and eyes, come down through the same genes. Sunken ships have a genome of their own, taken from ten of my wreck drawings.", "About fifty scenes, a shoal, a reef, a whirlpool, a cave, a kelp forest, decide how the garden grows. The watercolour engine was written specially for this work, painting in four layers with paper relief, flowing water and wet edges."], "tech": "Pure JavaScript · Canvas 2D & WebGL2 · custom genome and watercolour engine · no libraries", "imgs": ["img/deepgarden-f1.jpg", "img/deepgarden-f2.jpg", "img/deepgarden-f3.jpg", "img/deepgarden-f4.jpg", "img/deepgarden-2.jpg", "img/deepgarden-n0.jpg", "img/deepgarden-4.jpg", "img/deepgarden-n1.jpg", "img/deepgarden-1.jpg", "img/deepgarden-n6.jpg", "img/deepgarden-n11.jpg", "img/deepgarden-3.jpg", "img/deepgarden-n4.jpg", "img/deepgarden-n2.jpg", "img/deepgarden-5.jpg", "img/deepgarden-n10.jpg", "img/deepgarden-n8.jpg", "img/deepgarden-n9.jpg"], "vids": ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""], "video": "", "released": false, "isNew": false, "ext": null}, {"id": "polaroid", "title": "Polaroid Long Exposure", "sub": "", "year": "2026", "line": "Night roads outside real cities, seen by a photographer who is moving too: the horizon holds still while lamps and headlights stretch and wave.", "info": ["A Polaroid is a memory you can hold. This series begins with an earlier work of mine, a night drive photographed from inside a moving bus, and rebuilds it as a real three-dimensional world. Each picture is a true long exposure: the bus, the cars and my hand all move while the shutter is open, and the tremor of the hand is written into the lights.", "Every print is a memory of a journey to a real place. The work is built on geography: each picture belongs to a city, from Paris and Kyoto to Phoenix and Cape Town, and carries its name, its code and a date beneath the image, like notes written on the back of a travel photo. The whole landscape follows that place: the trees are species that grow there, the mountains, deserts, forests and plains are shaped like its land, the sky and the weather are its own, and the road signs follow its country's system.", "A film engine written specially for this work develops the picture, with the failures of real old Polaroids: burst chemistry, streaks, stains and fading. You can watch each print develop, slowly coming up out of the dark."], "tech": "Pure JavaScript · WebGL · custom exposure and film engine · no libraries", "imgs": ["img/polaroid-1.jpg", "img/polaroid-a1.jpg", "img/polaroid-n4.jpg", "img/polaroid-3.jpg", "img/polaroid-a2.jpg", "img/polaroid-n6.jpg", "img/polaroid-n10.jpg", "img/polaroid-a3.jpg", "img/polaroid-4.jpg", "img/polaroid-n2.jpg", "img/polaroid-a4.jpg", "img/polaroid-n5.jpg", "img/polaroid-n7.jpg", "img/polaroid-n3.jpg"], "vids": ["", "img/polaroid-a1.mp4", "", "", "img/polaroid-a2.mp4", "", "", "img/polaroid-a3.mp4", "", "", "img/polaroid-a4.mp4", "", "", ""], "video": "", "released": false, "isNew": false, "ext": null}, {"id": "kumo", "title": "Kumo", "sub": "", "year": "2026", "line": "Generative marbled sheets: inks dropped, combed and stirred, in the vivid palettes of painters.", "info": ["Kumo means cloud. Marbled paper, ink floated on water and lifted onto a sheet, belongs to the long tradition of the East: in Japan, in Persia, in India. For centuries it framed calligraphy and the pages of books, mounted single sheets of writing, and decorated the courts of kings, in the same workshops as flower-and-bird painting, illumination and gilded margins. Every sheet was a chance cloud that no hand could draw twice. Kumo carries that tradition on.", "Its genome was measured from 85 of my works. A sheet is built from a few large panels, each with its own technique and cut, and feathered combs pull sharp, hooked plumes through the ink.", "Twenty-four palettes come from painters and traditions that set many colours side by side: Chagall, Klimt, Matisse, Kandinsky, Hilma af Klint, Persian miniature, Isfahan tile, ukiyo-e and more. The marbling and paper engine was written specially for this work, with coloured pencil on the tooth of aged paper."], "tech": "Pure JavaScript · custom marbling and paper engine · no libraries", "imgs": ["img/kumo-1.jpg", "img/kumo-n5.jpg", "img/kumo-2.jpg", "img/kumo-n3.jpg", "img/kumo-n8.jpg", "img/kumo-n9.jpg", "img/kumo-3.jpg", "img/kumo-n11.jpg", "img/kumo-n2.jpg", "img/kumo-n1.jpg", "img/kumo-n4.jpg", "img/kumo-n10.jpg", "img/kumo-4.jpg", "img/kumo-n7.jpg"], "vids": ["", "", "", "", "", "", "", "", "", "", "", "", "", ""], "video": "", "released": false, "isNew": false, "ext": null}, {"id": "mewed", "title": "Mewed", "sub": "", "year": "2026", "line": "Captive Simorgh: an intaglio print in which a bird grows inside a skewed room and is pressed against its walls.", "info": ["A mewed hawk is a hawk kept in its cage while it moults. Mewed shows the Simorgh, the free bird of the old Persian poem, shut inside a room too small for her. She keeps growing, wing, tail and curl, and wherever she meets a wall she flattens against it and slides along it, as if melting into the room that holds her.", "The bird takes its forms from my Simorgh, but this time grows in three dimensions. The front of the room never moves; only the back wall does, so every work has its own depth.", "Each work is an etching. The etching engine was written specially for this work: aquatint bitten in twenty-nine levels, soft-ground, burin and scorper lines, and a plate surface measured from real plates, with the ink film and thousands of fine scratches."], "tech": "Pure JavaScript · WebGL2 · custom etching engine · no libraries", "imgs": ["img/mewed-3.jpg", "img/mewed-n3.jpg", "img/mewed-1.jpg", "img/mewed-n4.jpg", "img/mewed-n11.jpg", "img/mewed-n7.jpg"], "vids": ["", "", "", "", "", ""], "video": "", "released": false, "isNew": false, "ext": null}, {"id": "doto", "title": "Dotō", "sub": "怒涛", "year": "2026", "line": "A surge of paint: abstract paintings in which marks, handwriting and forms repeat, gather and break.", "info": ["Dotō means a raging surge. The work rests on a set of recurring rules rather than a single picture. A stroke is laid down, then repeated with a slight change, and repeated again, until the repetition becomes a wave.", "Handwriting runs through the pattern and never stays the same: letters loosen, drift and are overwritten as the painting grows. Unexpected forms rise out of the surge, a cluster, a diagonal, a vessel, a hanging shape or a buried mass, and the rules build each of them layer over layer, leaving a raw paper margin around the painting like the edge of a sheet pinned to the studio wall.", "The painting can be watched as it is made, stroke after stroke, the way it would happen in front of the easel."], "tech": "Pure JavaScript · Canvas · custom painting engine · no libraries", "imgs": ["img/doto-1.jpg", "img/doto-2.jpg", "img/doto-3.jpg", "img/doto-4.jpg", "img/doto-5.jpg"], "vids": ["", "", "", "", ""], "video": "", "released": false, "isNew": false, "ext": null}, {"id": "sohrab", "title": "Sohrab’s Trees", "sub": "", "year": "2026", "line": "In memory of Sohrab Sepehri: forests of trunks, adobe villages and distant mountains, painted with brush and knife.", "info": ["Sohrab Sepehri (1928–1980), the Iranian poet of silence and painter of light, saw in every tree a quiet expression of existence, in every branch an invisible thought, and in every leaf a fragment of an unwritten poem. Sohrab's Trees is a tribute to that vision. Here trees grow not from soil but from numbers and chance, and each seed gives birth to a world of its own: a letter sent from the digital age to his poetic universe, so that something of his silence, simplicity and light can live on in a new language.", "I studied Sepehri's paintings closely and built the work on them: the way his knife lays down a trunk, the way he builds a landscape, the logic of his perspective, how he places his trees and the angle at which they stand, the mountains he sets far in the distance. To that I added a world of my own. Groves of trunks and branches, adobe villages, layered mountains, river stones, haze and fog, all painted with brush, knife and pigment textures across sixteen palettes.", "Some works are rare: the Wine and Midnight palettes, a silver, gold or black ridge, a single great boulder, smoke rising from the ground, or an odd tree, pale, crimson, black or teal, standing apart from its grove. Rarest of all is Rainbow, made in honour of the LGBTQ+ community, where the whole world of the painting, trees, houses, mountains and stones, takes on the seven colours of the rainbow.", "The painting engine was written specially for this work. Every piece is painted live from its seed, and because it is never stored as pixels, it can be rendered at the size of a phone or of a gallery wall with the same composition and full detail."], "tech": "JavaScript · custom brush and knife painting engine", "imgs": ["img/sohrab-d0.jpg", "img/sohrab-p1.jpg", "img/sohrab-p3.jpg", "img/sohrab-p4.jpg", "img/sohrab-p5.jpg", "img/sohrab-d4.jpg", "img/sohrab-d12.jpg", "img/sohrab-d5.jpg", "img/sohrab-p6.jpg", "img/sohrab-p7.jpg", "img/sohrab-p9.jpg", "img/sohrab-p10.jpg"], "vids": ["", "", "", "", "", "", "", "", "", "", "", ""], "video": "", "released": false, "isNew": false, "ext": {"label": "Watch it live on Highlight", "note": "Showcase only · mint closed", "url": "https://highlight.xyz/mint/01a13c74-ade8-7036-97b6-18742c2552b4"}}];
-const EARLIER = [{"title": "the Pazyryk", "year": "2023", "ed": "200 · sold out", "url": "https://seeded.art/project/28570"}, {"title": "Auroria", "year": "2023", "ed": "33 · sold out", "url": "https://seeded.art/project/25826"}, {"title": "Euphoria", "year": "2023", "ed": "222 · sold out", "url": "https://seeded.art/project/24153"}, {"title": "La Bougie, with ArashMP", "year": "2022", "ed": "365 · sold out", "url": "https://seeded.art/project/21593"}, {"title": "De Stijl", "year": "2022", "ed": "256 · sold out", "url": "https://seeded.art/project/20599"}, {"title": "Abstract Memories", "year": "2022", "ed": "256 · sold out", "url": "https://seeded.art/project/19711"}, {"title": "Abstract Life", "year": "2022", "ed": "256 · sold out", "url": "https://seeded.art/project/17985"}, {"title": "the Horizon", "year": "2022", "ed": "150 · sold out", "url": "https://seeded.art/project/16856"}, {"title": "the Glory of Colours", "year": "2022", "ed": "256 · sold out", "url": "https://seeded.art/project/16011"}, {"title": "EagleView", "year": "2022", "ed": "60 · sold out", "url": "https://seeded.art/project/15791"}, {"title": "the Shining Night Sky", "year": "2022", "ed": "31 · sold out", "url": "https://seeded.art/project/15491"}, {"title": "the Simurgh", "year": "2022", "ed": "101 · sold out", "url": "https://seeded.art/project/15379"}, {"title": "the Black Blocks", "year": "2022", "ed": "50 · sold out", "url": "https://seeded.art/project/14726"}, {"title": "the Galaxy", "year": "2022", "ed": "10 · sold out", "url": "https://seeded.art/project/14491"}, {"title": "Kandinsky's Mind", "year": "2022", "ed": "21 · sold out", "url": "https://seeded.art/project/14217"}, {"title": "the Poetry Garden", "year": "2022", "ed": "6 · sold out", "url": "https://seeded.art/project/12826"}];
-const L = {"mint": "https://opensea.io/collection/bonjoy/overview", "opensea": "https://opensea.io/collection/bonjoy", "seed": "https://seeded.art/profile/tz1dwbtWaHdFFiomDBG65XYw1VAfiHtrviXz", "objkt": "https://objkt.com/profile/tz1dwbtWaHdFFiomDBG65XYw1VAfiHtrviXz/created", "x": "https://x.com/chistaai"};
-const $ = (s, r = document) => r.querySelector(s);
-const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const app = $('#app');
+const DATA = [{"id": "bonjoy", "title": "BONJOY", "sub": "", "year": "2026", "line": "999 pixel skulls on Base. Dead, and doing fine.", "info": ["BONJOY is 999 pixel skulls by Chista, generated on Base. Each skull is decided at mint by a seed written on chain in the same transaction. Nobody, the artist included, knows which skull a mint will bring.", "Every piece is a six-second loop in which a skull might blink, burp, let its brain slide out of its eyes, or carry a sleeping cat."], "tech": "Pure JavaScript · no libraries", "imgs": ["img/bj1.jpg", "img/bj3.jpg", "img/bj12.jpg", "img/bj17.jpg", "img/bj6.jpg", "img/bj4.jpg", "img/bj5.jpg", "img/bj0.jpg", "img/bj2.jpg", "img/bj7.jpg", "img/bj8.jpg", "img/bj9.jpg", "img/bj10.jpg", "img/bj11.jpg", "img/bj13.jpg", "img/bj14.jpg", "img/bj15.jpg", "img/bj16.jpg", "img/bj18.jpg", "img/bj19.jpg", "img/bj20.jpg", "img/bj21.jpg", "img/bj23.jpg", "img/bj24.jpg", "img/bj25.jpg", "img/bj26.jpg"], "vids": ["img/bj1.mp4", "img/bj3.mp4", "img/bj12.mp4", "img/bj17.mp4", "img/bj6.mp4", "img/bj4.mp4", "img/bj5.mp4", "img/bj0.mp4", "img/bj2.mp4", "img/bj7.mp4", "img/bj8.mp4", "img/bj9.mp4", "img/bj10.mp4", "img/bj11.mp4", "img/bj13.mp4", "img/bj14.mp4", "img/bj15.mp4", "img/bj16.mp4", "img/bj18.mp4", "img/bj19.mp4", "img/bj20.mp4", "img/bj21.mp4", "img/bj23.mp4", "img/bj24.mp4", "img/bj25.mp4", "img/bj26.mp4"], "video": "", "released": true, "isNew": false, "ext": null, "tint": "#cde8e9"}, {"id": "allaprima", "title": "Alla Prima", "sub": "", "year": "2026", "line": "Checkered cloth over hidden volumes, painted in oil, layer by layer. Every seed is a finished canvas.", "info": ["Each work begins as a three-dimensional scene: checkered cloth draped over hidden forms, then shifted, pulled and cut apart until only the painting is left.", "The oil engine was written specially for this work. It paints the way oil painters did, session by session, from a thin underpainting to glazes, thick lights and varnish. The brush runs dry, drags wet paint and moves shape by shape across the canvas, like a painter's hand."], "tech": "JavaScript · WebGL2 · custom engine built for painting · no libraries", "imgs": ["img/ap-7777p.jpg", "img/ap-1588p.jpg", "img/ap-1234p.jpg", "img/ap-11111p.jpg", "img/ap-3317p.jpg", "img/ap-4096p.jpg", "img/ap-50505p.jpg", "img/ap-311p.jpg", "img/ap-6262p.jpg", "img/ap-42p.jpg", "img/ap-31415p.jpg", "img/ap-2401p.jpg", "img/ap-905p.jpg", "img/ap-23456p.jpg", "img/ap-8123p.jpg"], "vids": ["img/ap-7777p.mp4", "", "", "", "", "", "", "", "", "", "", "", "", "", ""], "video": "img/ap-7777p.mp4", "released": false, "isNew": true, "ext": null, "tint": "#eedec7"}, {"id": "divoni", "title": "Divoni", "sub": "ディヴォニ", "year": "2026", "line": "Legendary Japanese warriors built from my own drawings, painted in watercolour on aged washi.", "info": ["In Japanese painting the oni, demons, ogres and fierce guardians, have been drawn for centuries, and almost every culture in the world has painted its own: the div, the demon, the monster at the edge of the map. Divoni brings these figures together in one face. Its name joins div and oni, and it gives that old image a new form: a generative portrait, born on the blockchain.", "Divoni is built from more than a hundred of my hand drawings. Forty-eight full warrior designs are cut into seven parts, crest, halo, second halo, face, eyes, beard and armour, and every part can come from any design, from its left or its right half. The code chooses, mirrors, scales and joins them, so the number of possible warriors runs into the trillions. None of them existed before, but every line in them was drawn by hand.", "Everything is fully generative and fully code: the drawing, the colour, the watercolour and the paper. The watercolour engine was written specially for this work. Pigment flows where the paper is wet, gathers at the drying edge and blooms, but stops at the eyes so the gaze stays sharp. Each sheet is mounted on aged Japanese paper."], "tech": "Pure JavaScript · WebGL2 · custom watercolour engine · no libraries", "imgs": ["img/divoni-0.jpg", "img/divoni-n1.jpg", "img/divoni-n7.jpg", "img/divoni-n6.jpg", "img/divoni-n3.jpg", "img/divoni-n4.jpg", "img/divoni-n5.jpg", "img/divoni-3.jpg", "img/divoni-2.jpg", "img/divoni-n2.jpg"], "vids": ["", "", "", "", "", "", "", "", "", ""], "video": "", "released": false, "isNew": false, "ext": null, "tint": "#c7eedb"}, {"id": "cubist", "title": "Cube Girls", "sub": "", "year": "2026", "line": "One seed, one woman: cubist portraits grown from a decision tree and painted in wet-on-wet pastel.", "info": ["The seated woman is one of the great subjects of Cubism. Cube Girls returns to her in my own handwriting, with rules drawn from my cubist pastel works. Every work holds one woman, close up, at the shoulders, half-length, seated, in profile, seen from above or rising from below, and she dissolves into the same broken geometry as the room around her.", "She is not assembled the way a profile picture is, by stacking layers. A decision tree builds her, choice by choice: the framing decides the pose, the pose decides the hands, the look decides the sleeves, the dress decides what may sit around the neck. Face, eyes, brows, nose, mouth, hair, hat, collar, jewellery, flowers, the room and the art on its wall, more than thirty traits in all, each depending on the ones before it. One half of a face may come from one type and the other half from another. That is why no two works are alike: they differ in kind, not only in colour.", "Rare branches of the tree lead further: women drawn after African masks, gowns and grounds of Klimt gold, hands that make a heart, cubist smiles, pure line drawings and black ink cuts across every plane. Every ground, plain or full of objects, is built as a finished cubist painting in its own right.", "The pastel engine was written specially for this work, and it paints as a pastel artist does. Colour is laid wet on wet, so neighbouring planes bleed softly into each other; pencil hatching runs over the colour in layers; the pigment catches on the fibres of the paper like felt, and the frame takes its colour from each palette. Form comes from colour, never from outline."], "tech": "Pure JavaScript · Canvas & WebGL · custom wet-on-wet pastel engine · no libraries", "imgs": ["img/cubist-6.jpg", "img/cubist-2.jpg", "img/cubist-n0.jpg", "img/cubist-4.jpg", "img/cubist-n2.jpg", "img/cubist-7.jpg", "img/cubist-n3.jpg", "img/cubist-n8.jpg", "img/cubist-1.jpg", "img/cubist-n5.jpg", "img/cubist-n11.jpg", "img/cubist-8.jpg", "img/cubist-n1.jpg", "img/cubist-n6.jpg", "img/cubist-9.jpg"], "vids": ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""], "video": "", "released": false, "isNew": false, "ext": null, "tint": "#c7eee7"}, {"id": "cubegirls", "title": "Cube Girls: Études", "sub": "", "year": "2026", "line": "The same women before the paint: the artist's working sheet, with the first underdrawing, the decisions, the notes and the small studies still on it.", "info": ["Every artist keeps notebooks. Before a portrait is painted, it lives there first: a first sketch, a few decisions, a study, notes in the margin. Cube Girls: Études comes from those notebooks. It is the second face of Cube Girls, with the same decision tree, the same women and the same cubist cuts, shown at the moment before painting, as a page from the artist's book.", "Under the ink lies the first underdrawing of the woman, in a shaky pencil line, taken from the figure before its cubist cuts, so the straight cut lines still show beneath the shifted ink. Some of the early lines survive; others have been rubbed out, because the decision changed once the work was carried out. Where there is room, a small study of part of the work sits beside it, drawn again at a smaller size.", "Around her are the artist's notes, written, struck through, erased and written again, and they are deliberately hard to read. In my own notebooks the notes I write about a drawing are always like this; sometimes even I cannot read them, or understand in that moment what I meant. Slowly the way becomes clear, and the work is finished. These pages keep that moment, before it is clear.", "The sheet is an old one, and it has lived: folds, creases, foxing, tape, worn corners and the grain of the paper. The ink and pencil engine was written specially for this work."], "tech": "Pure JavaScript · Canvas · custom ink, pencil and paper engine · no libraries", "imgs": ["img/cubegirls-1.jpg", "img/cubegirls-n1.jpg", "img/cubegirls-n9.jpg", "img/cubegirls-n10.jpg", "img/cubegirls-n5.jpg", "img/cubegirls-2.jpg", "img/cubegirls-n6.jpg", "img/cubegirls-n4.jpg", "img/cubegirls-4.jpg", "img/cubegirls-n7.jpg", "img/cubegirls-n2.jpg", "img/cubegirls-n11.jpg"], "vids": ["", "", "", "", "", "", "", "", "", "", "", ""], "video": "", "released": false, "isNew": false, "ext": null, "tint": "#e4dfd2"}, {"id": "boro", "title": "Boro", "sub": "ぼろ 2026", "year": "2026", "line": "Generative embroidery: scraps of cloth gathered and stitched, and the cloth can be turned over to see its back.", "info": ["Nothing in boro is thrown away. A torn sleeve, an old kimono, a scrap of indigo: each one is given a new life inside another cloth, and keeps working. The word comes from the Japanese boroboro, something tattered or mended. Every piece in this series is made the same way, from fragments that carry a past, joined into something that has never existed before.", "Boro is the Japanese tradition of mending worn cloth, patch over patch, until the repairs become the beauty of the fabric. Each work gathers patches of linen, kasuri and printed fabrics and joins them with running stitches, and you watch the piece being sewn, stitch by stitch.", "The Back view turns the textile over to show the reverse of the stitching, and the Light view holds it up against the light. Rare pieces leave the patchwork behind: a koi pond where one great fish is pieced from scraps, kintsugi gold, aizome indigo, imperial blue and gin silver."], "tech": "Pure JavaScript · Canvas 2D & WebGL · custom thread and fibre engine · no libraries", "imgs": ["img/boro-h0.jpg", "img/boro-h9.jpg", "img/boro-h3.jpg", "img/boro-h4.jpg", "img/boro-h7.jpg", "img/boro-h11.jpg", "img/boro-h13.jpg", "img/boro-h15.jpg", "img/boro-1.jpg"], "vids": ["", "", "", "", "", "", "", "", ""], "video": "img/boro-anim.mp4", "released": false, "isNew": false, "ext": null, "tint": "#cfe7dd"}, {"id": "simorgh", "title": "Simorgh", "sub": "", "year": "2026", "line": "Abstract paintings of the mythical bird: ribbons, feathers and eyes inside the pages of an old Persian book.", "info": ["In Attar's Conference of the Birds, thousands of birds set out to find the Simorgh, their king. Only thirty reach the end, and there they find that the Simorgh is themselves: si morgh, thirty birds. In this series she is never shown whole. She appears as a wing, a head, a flower or a tree, each work one glimpse of her.", "Simorgh is a modern painting that borrows from the old Persian art of the book. The trees are the trees of Persian miniatures. The frames are the page layouts of old Persian manuscripts, with their gold leaf and fields of stippled dots. And the bird has a logic of her own: wherever a wing reaches, the frame bends and breaks around it.", "She is built from long painted ribbons, teardrop eyes and feather patterns, following the golden spiral. Most works are in natural colour; rare ones turn psychedelic, or negative, the whole painting in a single tinted tone."], "tech": "Pure JavaScript · Canvas · custom painting engine · no libraries", "imgs": ["img/simorgh-n1.jpg", "img/simorgh-n101.jpg", "img/simorgh-n105.jpg", "img/simorgh-1.jpg", "img/simorgh-n2.jpg", "img/simorgh-n103.jpg", "img/simorgh-n3.jpg", "img/simorgh-n106.jpg", "img/simorgh-n8.jpg", "img/simorgh-n100.jpg", "img/simorgh-n0.jpg", "img/simorgh-n7.jpg", "img/simorgh-n112.jpg"], "vids": ["", "", "", "", "", "", "", "", "", "", "", "", ""], "video": "", "released": false, "isNew": false, "ext": null, "tint": "#eedbc7"}, {"id": "niwa", "title": "Niwa", "sub": "庭", "year": "2026", "line": "A Japanese garden built layer by layer, from the grass at your feet to the mountain on the horizon.", "info": ["A Japanese garden is made to be walked through slowly. It hides as much as it shows, and every turn of the path opens a new view. Niwa is built the same way, in layers, from near to far.", "It begins with meadow grass and flowers. Then a pond, with koi moving in it. Further on, bonsai and pines, and a bridge over the water. Sometimes women in kimono walk in the garden. Japanese houses rise against the sky, trees show behind the fences, and far away there is a mountain, sometimes with the sun above it. The garden keeps going, as far as the eye can see, a world with room left to discover.", "Every seed chooses where to stand and how to look: at the koi pond, in a bamboo grove, among the reeds, before a temple or under a sakura bough. Everything is drawn in one even line. Stones are cut into faceted planes and hatched, seasons bring rain, snow, petals and passing birds, and the same drawing can be printed in sumi black, black and gold, navy, dark green, watercolour or risograph."], "tech": "Pure JavaScript · custom vector line engine · no libraries", "imgs": ["img/niwa-p1.jpg", "img/niwa-p4.jpg", "img/niwa-p2.jpg", "img/niwa-p6.jpg", "img/niwa-p9.jpg", "img/niwa-p10.jpg", "img/niwa-p12.jpg", "img/niwa-p8.jpg", "img/niwa-p3.jpg", "img/niwa-p11.jpg", "img/niwa-p7.jpg"], "vids": ["", "", "", "", "", "", "", "", "", "", ""], "video": "", "released": false, "isNew": false, "ext": null, "tint": "#e7dfcf"}, {"id": "gunta", "title": "Gunta Rug", "sub": "Square", "year": "2026", "line": "Square deep-pile rugs, woven in yarn and rendered knot by knot.", "info": ["Gunta is named after Gunta Stölzl, master of the Bauhaus weaving workshop, and it sits between two traditions: the geometric rugs of the Bauhaus and the free, hand-knotted gabbeh of the Persian nomads. The grid gives the order, the hand gives the life: rows swell, thin and drift, and colours shift from knot to knot.", "Each rug has a border, an inner frame of small forms, and a field that follows one of two grammars: stepped bands of colour, or a mirrored check of wide fields and narrow strips. Colour comes from forty yarn palettes.", "The pile is drawn by an engine written specially for this work. Every knot is a bundle of fibres that bends with the nap, narrows at the tip and splits into finer strands. Deep fibres fall into shadow, the tips catch a soft sheen, and the rug feels thick enough to touch."], "tech": "Pure JavaScript · WebGL · custom deep-pile engine · no libraries", "imgs": ["img/gunta-1.jpg", "img/gunta-2.jpg", "img/gunta-3.jpg", "img/gunta-4.jpg", "img/gunta-5.jpg", "img/gunta-6.jpg", "img/gunta-7.jpg", "img/gunta-8.jpg"], "vids": ["", "", "", "", "", "", "", ""], "video": "", "released": false, "isNew": false, "ext": null, "tint": "#eec9c8"}, {"id": "ryuka", "title": "Ryūka", "sub": "竜火", "year": "2026", "line": "Geometric watercolours in which a legendary beast rises out of the painting and turns its fire on the city.", "info": ["Ryūka means dragon fire. In Japanese art the dragon and the lion-dog are guardians: for centuries they watched over temples, cities and people. In Ryūka they have turned. The forests, rivers and mountains they once protected have been poisoned and cleared, and the guardians have come down from the painting to answer for them. They rise out of the same squares, circles and patchwork the sheet is made of, and breathe fire on the great city beside them and on its small towns. It is not rage without reason: it is nature, grieving, taking back its ground.", "Thirty-two of my paintings gave eleven ways to compose a sheet and the palettes it is painted in. The beasts are dressed in traditional Japanese patterns, seigaiha, asanoha, kikkō, uroko and more, and the fire comes from inside the mouth.", "The watercolour engine was written specially for this work. Each part has its own wetness: a wet ground, very wet masses and dry, sharp objects, and random fractures slide bands and blocks out of place."], "tech": "Pure JavaScript · WebGL2 · custom watercolour engine · no libraries", "imgs": ["img/ryuka-2.jpg", "img/ryuka-n4.jpg", "img/ryuka-5.jpg", "img/ryuka-n2.jpg", "img/ryuka-n6.jpg", "img/ryuka-n1.jpg", "img/ryuka-n5.jpg", "img/ryuka-n0.jpg", "img/ryuka-3.jpg", "img/ryuka-n7.jpg", "img/ryuka-n11.jpg", "img/ryuka-n8.jpg", "img/ryuka-6.jpg", "img/ryuka-n3.jpg"], "vids": ["", "", "", "", "", "", "", "", "", "", "", "", "", ""], "video": "", "released": false, "isNew": false, "ext": null, "tint": "#e9e7cd"}, {"id": "hanabi", "title": "Hanabi", "sub": "花火", "year": "2026", "line": "Fire flowers: three-dimensional blooms drawn in ink on a broken ground, each with its light still spreading behind it.", "info": ["Hanabi means fireworks; word for word, fire flowers. A firework is a flower that blooms in the dark sky, and a flower is a firework that opens slowly on the ground. Both live a single bright moment, and then they are gone. Each sheet holds that moment: the bloom at its fullest, its colour still burning outward behind it like a burst over the summer river.", "Every flower is built as a true three-dimensional form from its own botanical measurements, then turned into ink: stipple, dashes, flowing lines or engraved hatching. The ground is a cubist partition taken from my own paintings, broken like glass around the light.", "The ink and watercolour engine was written specially for this work. Each sheet takes its own mood: day, dawn, autumn, night, misty rain, winter snow, sumi ink with a single red, or kintsugi gold running through the seams."], "tech": "Pure JavaScript · WebGL2 · custom ink and watercolour engine · no libraries", "imgs": ["img/hanabi-n110.jpg", "img/hanabi-n101.jpg", "img/hanabi-n104.jpg", "img/hanabi-n103.jpg", "img/hanabi-n108.jpg", "img/hanabi-n100.jpg", "img/hanabi-n105.jpg", "img/hanabi-n106.jpg", "img/hanabi-n2.jpg", "img/hanabi-n111.jpg", "img/hanabi-n109.jpg", "img/hanabi-n4.jpg", "img/hanabi-n112.jpg", "img/hanabi-n7.jpg", "img/hanabi-n10.jpg", "img/hanabi-n3.jpg"], "vids": ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""], "video": "", "released": false, "isNew": false, "ext": null, "tint": "#e8e0ce"}, {"id": "mugen", "title": "Mugen", "sub": "夢幻", "year": "2026", "line": "The shapes that come just before sleep: knots, snakes, spirals and braids, carrying you into a dream.", "info": ["Mugen means dream and illusion. It paints the moment just before sleep, when your eyes grow heavy and shapes begin to arrive behind your eyelids: coils, knots, braided strands, colours that have no name. They are not the dream yet. They are the roads into it. You climb onto a snake, onto one of these strange forms, and it carries you down into your memories and further, into the dream, until you come to yourself lost in a winding forest of colour, already caught in sleep.", "Knots, coiled snakes, spirals, braided hair and ribbed cages drift among half-remembered things, an umbrella, a lantern, a paper carp, a circle of ink, each dressed in its own pattern. Some sheets gather everything into a single island floating on bare paper; others come close and fill the whole sheet, the way a dream closes around you.", "The paint and paper engine was written specially for this work. The paper takes its colour and relief from real sheets, with wetness, salt and grain."], "tech": "Pure JavaScript · WebGL2 · custom paint and paper engine · no libraries", "imgs": ["img/mugen-1.jpg", "img/mugen-4.jpg", "img/mugen-6.jpg", "img/mugen-3.jpg", "img/mugen-7.jpg", "img/mugen-13.jpg", "img/mugen-8.jpg", "img/mugen-11.jpg", "img/mugen-10.jpg", "img/mugen-2.jpg"], "vids": ["", "", "", "", "", "", "", "", "", ""], "video": "", "released": false, "isNew": false, "ext": null, "tint": "#eed3c7"}, {"id": "deepgarden", "title": "Deep Garden", "sub": "", "year": "2026", "line": "An underwater garden of creatures born from a genome, in watercolour and the colours of late Kandinsky.", "info": ["Deep Garden is not a collage. Nothing here is a head taken from one drawing and a tail from another. It has a genome. I made 255 drawings of sea creatures, measured every one of them, and reduced all their differences to 28 genes. From those genes the work grows creatures of its own, and not one of them looks like any of the 255. The drawings gave their genome; the creatures are born from it.", "Because they are born, they inherit. Parents pass their genes to their young, and sometimes a whole family appears, mother, father and children swimming together, alike in the way relatives are alike. Even the patterns inside their bodies, cells, spots, stripes and eyes, come down through the same genes. Sunken ships have a genome of their own, taken from ten of my wreck drawings.", "About fifty scenes, a shoal, a reef, a whirlpool, a cave, a kelp forest, decide how the garden grows. The watercolour engine was written specially for this work, painting in four layers with paper relief, flowing water and wet edges."], "tech": "Pure JavaScript · Canvas 2D & WebGL2 · custom genome and watercolour engine · no libraries", "imgs": ["img/deepgarden-f1.jpg", "img/deepgarden-f2.jpg", "img/deepgarden-f3.jpg", "img/deepgarden-f4.jpg", "img/deepgarden-2.jpg", "img/deepgarden-n0.jpg", "img/deepgarden-4.jpg", "img/deepgarden-n1.jpg", "img/deepgarden-1.jpg", "img/deepgarden-n6.jpg", "img/deepgarden-n11.jpg", "img/deepgarden-3.jpg", "img/deepgarden-n4.jpg", "img/deepgarden-n2.jpg", "img/deepgarden-5.jpg", "img/deepgarden-n10.jpg", "img/deepgarden-n8.jpg", "img/deepgarden-n9.jpg"], "vids": ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""], "video": "", "released": false, "isNew": false, "ext": null, "tint": "#eae5cc"}, {"id": "polaroid", "title": "Polaroid Long Exposure", "sub": "", "year": "2026", "line": "Night roads outside real cities, seen by a photographer who is moving too: the horizon holds still while lamps and headlights stretch and wave.", "info": ["A Polaroid is a memory you can hold. This series begins with an earlier work of mine, a night drive photographed from inside a moving bus, and rebuilds it as a real three-dimensional world. Each picture is a true long exposure: the bus, the cars and my hand all move while the shutter is open, and the tremor of the hand is written into the lights.", "Every print is a memory of a journey to a real place. The work is built on geography: each picture belongs to a city, from Paris and Kyoto to Phoenix and Cape Town, and carries its name, its code and a date beneath the image, like notes written on the back of a travel photo. The whole landscape follows that place: the trees are species that grow there, the mountains, deserts, forests and plains are shaped like its land, the sky and the weather are its own, and the road signs follow its country's system.", "A film engine written specially for this work develops the picture, with the failures of real old Polaroids: burst chemistry, streaks, stains and fading. You can watch each print develop, slowly coming up out of the dark."], "tech": "Pure JavaScript · WebGL · custom exposure and film engine · no libraries", "imgs": ["img/polaroid-1.jpg", "img/polaroid-a1.jpg", "img/polaroid-n4.jpg", "img/polaroid-3.jpg", "img/polaroid-a2.jpg", "img/polaroid-n6.jpg", "img/polaroid-n10.jpg", "img/polaroid-a3.jpg", "img/polaroid-4.jpg", "img/polaroid-n2.jpg", "img/polaroid-a4.jpg", "img/polaroid-n5.jpg", "img/polaroid-n7.jpg", "img/polaroid-n3.jpg"], "vids": ["", "img/polaroid-a1.mp4", "", "", "img/polaroid-a2.mp4", "", "", "img/polaroid-a3.mp4", "", "", "img/polaroid-a4.mp4", "", "", ""], "video": "", "released": false, "isNew": false, "ext": null, "tint": "#e9d6cc"}, {"id": "kumo", "title": "Kumo", "sub": "", "year": "2026", "line": "Generative marbled sheets: inks dropped, combed and stirred, in the vivid palettes of painters.", "info": ["Kumo means cloud. Marbled paper, ink floated on water and lifted onto a sheet, belongs to the long tradition of the East: in Japan, in Persia, in India. For centuries it framed calligraphy and the pages of books, mounted single sheets of writing, and decorated the courts of kings, in the same workshops as flower-and-bird painting, illumination and gilded margins. Every sheet was a chance cloud that no hand could draw twice. Kumo carries that tradition on.", "Its genome was measured from 85 of my works. A sheet is built from a few large panels, each with its own technique and cut, and feathered combs pull sharp, hooked plumes through the ink.", "Twenty-four palettes come from painters and traditions that set many colours side by side: Chagall, Klimt, Matisse, Kandinsky, Hilma af Klint, Persian miniature, Isfahan tile, ukiyo-e and more. The marbling and paper engine was written specially for this work, with coloured pencil on the tooth of aged paper."], "tech": "Pure JavaScript · custom marbling and paper engine · no libraries", "imgs": ["img/kumo-1.jpg", "img/kumo-n5.jpg", "img/kumo-2.jpg", "img/kumo-n3.jpg", "img/kumo-n8.jpg", "img/kumo-n9.jpg", "img/kumo-3.jpg", "img/kumo-n11.jpg", "img/kumo-n2.jpg", "img/kumo-n1.jpg", "img/kumo-n4.jpg", "img/kumo-n10.jpg", "img/kumo-4.jpg", "img/kumo-n7.jpg"], "vids": ["", "", "", "", "", "", "", "", "", "", "", "", "", ""], "video": "", "released": false, "isNew": false, "ext": null, "tint": "#edc9cb"}, {"id": "mewed", "title": "Mewed", "sub": "", "year": "2026", "line": "Captive Simorgh: an intaglio print in which a bird grows inside a skewed room and is pressed against its walls.", "info": ["A mewed hawk is a hawk kept in its cage while it moults. Mewed shows the Simorgh, the free bird of the old Persian poem, shut inside a room too small for her. She keeps growing, wing, tail and curl, and wherever she meets a wall she flattens against it and slides along it, as if melting into the room that holds her.", "The bird takes its forms from my Simorgh, but this time grows in three dimensions. The front of the room never moves; only the back wall does, so every work has its own depth.", "Each work is an etching. The etching engine was written specially for this work: aquatint bitten in twenty-nine levels, soft-ground, burin and scorper lines, and a plate surface measured from real plates, with the ink film and thousands of fine scratches."], "tech": "Pure JavaScript · WebGL2 · custom etching engine · no libraries", "imgs": ["img/mewed-3.jpg", "img/mewed-n3.jpg", "img/mewed-1.jpg", "img/mewed-n4.jpg", "img/mewed-n11.jpg", "img/mewed-n7.jpg"], "vids": ["", "", "", "", "", ""], "video": "", "released": false, "isNew": false, "ext": null, "tint": "#e1ded4"}, {"id": "doto", "title": "Dotō", "sub": "怒涛", "year": "2026", "line": "A surge of paint: abstract paintings in which marks, handwriting and forms repeat, gather and break.", "info": ["Dotō means a raging surge. The work rests on a set of recurring rules rather than a single picture. A stroke is laid down, then repeated with a slight change, and repeated again, until the repetition becomes a wave.", "Handwriting runs through the pattern and never stays the same: letters loosen, drift and are overwritten as the painting grows. Unexpected forms rise out of the surge, a cluster, a diagonal, a vessel, a hanging shape or a buried mass, and the rules build each of them layer over layer, leaving a raw paper margin around the painting like the edge of a sheet pinned to the studio wall.", "The painting can be watched as it is made, stroke after stroke, the way it would happen in front of the easel."], "tech": "Pure JavaScript · Canvas · custom painting engine · no libraries", "imgs": ["img/doto-1.jpg", "img/doto-2.jpg", "img/doto-3.jpg", "img/doto-4.jpg", "img/doto-5.jpg"], "vids": ["", "", "", "", ""], "video": "", "released": false, "isNew": false, "ext": null, "tint": "#c7cbee"}, {"id": "sohrab", "title": "Sohrab’s Trees", "sub": "", "year": "2026", "line": "In memory of Sohrab Sepehri: forests of trunks, adobe villages and distant mountains, painted with brush and knife.", "info": ["Sohrab Sepehri (1928–1980), the Iranian poet of silence and painter of light, saw in every tree a quiet expression of existence, in every branch an invisible thought, and in every leaf a fragment of an unwritten poem. Sohrab's Trees is a tribute to that vision. Here trees grow not from soil but from numbers and chance, and each seed gives birth to a world of its own: a letter sent from the digital age to his poetic universe, so that something of his silence, simplicity and light can live on in a new language.", "I studied Sepehri's paintings closely and built the work on them: the way his knife lays down a trunk, the way he builds a landscape, the logic of his perspective, how he places his trees and the angle at which they stand, the mountains he sets far in the distance. To that I added a world of my own. Groves of trunks and branches, adobe villages, layered mountains, river stones, haze and fog, all painted with brush, knife and pigment textures across sixteen palettes.", "Some works are rare: the Wine and Midnight palettes, a silver, gold or black ridge, a single great boulder, smoke rising from the ground, or an odd tree, pale, crimson, black or teal, standing apart from its grove. Rarest of all is Rainbow, made in honour of the LGBTQ+ community, where the whole world of the painting, trees, houses, mountains and stones, takes on the seven colours of the rainbow.", "The painting engine was written specially for this work. Every piece is painted live from its seed, and because it is never stored as pixels, it can be rendered at the size of a phone or of a gallery wall with the same composition and full detail."], "tech": "JavaScript · custom brush and knife painting engine", "imgs": ["img/sohrab-d0.jpg", "img/sohrab-p1.jpg", "img/sohrab-p3.jpg", "img/sohrab-p4.jpg", "img/sohrab-p5.jpg", "img/sohrab-d4.jpg", "img/sohrab-d12.jpg", "img/sohrab-d5.jpg", "img/sohrab-p6.jpg", "img/sohrab-p7.jpg", "img/sohrab-p9.jpg", "img/sohrab-p10.jpg"], "vids": ["", "", "", "", "", "", "", "", "", "", "", ""], "video": "", "released": false, "isNew": false, "ext": {"label": "Watch it live on Highlight", "note": "Showcase only · mint closed", "url": "https://highlight.xyz/mint/01a13c74-ade8-7036-97b6-18742c2552b4"}, "tint": "#e7d8ce"}], EARLIER = [{"title": "the Pazyryk", "year": "2023", "ed": "200 · sold out", "url": "https://seeded.art/project/28570"}, {"title": "Auroria", "year": "2023", "ed": "33 · sold out", "url": "https://seeded.art/project/25826"}, {"title": "Euphoria", "year": "2023", "ed": "222 · sold out", "url": "https://seeded.art/project/24153"}, {"title": "La Bougie, with ArashMP", "year": "2022", "ed": "365 · sold out", "url": "https://seeded.art/project/21593"}, {"title": "De Stijl", "year": "2022", "ed": "256 · sold out", "url": "https://seeded.art/project/20599"}, {"title": "Abstract Memories", "year": "2022", "ed": "256 · sold out", "url": "https://seeded.art/project/19711"}, {"title": "Abstract Life", "year": "2022", "ed": "256 · sold out", "url": "https://seeded.art/project/17985"}, {"title": "the Horizon", "year": "2022", "ed": "150 · sold out", "url": "https://seeded.art/project/16856"}, {"title": "the Glory of Colours", "year": "2022", "ed": "256 · sold out", "url": "https://seeded.art/project/16011"}, {"title": "EagleView", "year": "2022", "ed": "60 · sold out", "url": "https://seeded.art/project/15791"}, {"title": "the Shining Night Sky", "year": "2022", "ed": "31 · sold out", "url": "https://seeded.art/project/15491"}, {"title": "the Simurgh", "year": "2022", "ed": "101 · sold out", "url": "https://seeded.art/project/15379"}, {"title": "the Black Blocks", "year": "2022", "ed": "50 · sold out", "url": "https://seeded.art/project/14726"}, {"title": "the Galaxy", "year": "2022", "ed": "10 · sold out", "url": "https://seeded.art/project/14491"}, {"title": "Kandinsky's Mind", "year": "2022", "ed": "21 · sold out", "url": "https://seeded.art/project/14217"}, {"title": "the Poetry Garden", "year": "2022", "ed": "6 · sold out", "url": "https://seeded.art/project/12826"}], L = {"mint": "https://opensea.io/collection/bonjoy/overview", "opensea": "https://opensea.io/collection/bonjoy", "seed": "https://seeded.art/profile/tz1dwbtWaHdFFiomDBG65XYw1VAfiHtrviXz", "objkt": "https://objkt.com/profile/tz1dwbtWaHdFFiomDBG65XYw1VAfiHtrviXz/created", "x": "https://x.com/chistaai"};
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const byId = id => DATA.find(d => d.id === id);
-
-function home() {
-  const divoni = byId('divoni'), bj = byId('bonjoy');
-  return `
-<section class="wrap hero"><div class="txt">
-<p class="eyebrow">Generative painter</p>
-<h1>Paintings that begin by hand and finish in code.</h1>
-<p class="lead">Every series starts from my own drawings and paintings. For each one I write its own render engine — watercolour, pastel, ink, etching, wool — so the work keeps a painter’s hand.</p>
-<div style="display:flex;flex-wrap:wrap;gap:14px;padding-top:6px"><a class="btn dark" href="#works">See the works</a><a class="btn" href="#p/divoni">Divoni</a></div>
-</div><figure><img src="${divoni.imgs[0]}" alt="Divoni, a warrior mask painted in blue watercolour on aged washi" width="1200" height="1500"><figcaption><span class="serif" style="font-style:italic;color:var(--ink)">Divoni ディヴォニ</span> — one output of the generator</figcaption></figure></section>
-
-<section class="mintband" id="mint"><div class="wrap">
-<div class="vid"><video src="${bj.vids[1]}" autoplay loop muted playsinline></video></div>
-<div class="txt"><p class="eyebrow">Released · minting now</p><h2>BONJOY</h2>
-<p>999 animated pixel skulls on Base, each with a small life of its own. Every hash always draws the same skull, and every trait carries its own animation.</p>
-<div style="display:flex;flex-wrap:wrap;gap:14px;padding-top:6px"><a class="btn light" href="${L.mint}">Mint on OpenSea</a><a class="btn" href="${L.opensea}">View on OpenSea</a><a href="#p/bonjoy" style="padding:14px 6px;color:#D8CFC2">About the series →</a></div>
-</div></div></section>
-
-<section class="wrap block" id="works" style="border-top:0"><div class="head"><h2>Selected works</h2><p>Tap a series to see its outputs and notes</p></div>
-<div class="grid">${DATA.map(d => `<a class="card" href="#p/${d.id}"><div class="frame"><img loading="lazy" src="${d.imgs[0]}" alt="${esc(d.title)}"></div><div style="display:flex;flex-direction:column;gap:6px">${d.released ? '<p class="badge">Released · minting</p>' : ''}${d.isNew ? '<p class="badge" style="color:var(--mute)">New · not yet released</p>' : ''}<p class="t">${esc(d.title)} <span>${esc(d.sub)}</span></p><p class="l">${esc(d.line)}</p></div></a>`).join('')}</div></section>
-
-<section class="wrap block" id="index"><h2>All projects</h2><div class="list">${DATA.map(d => `<a class="row" href="#p/${d.id}"><span class="a">${esc(d.title)}</span><span class="b">${d.year}</span><span class="c">${esc(d.line)}</span></a>`).join('')}</div></section>
-
-<section class="wrap block" id="earlier"><div class="head"><h2>Earlier works</h2><p>Sixteen generative collections released on Tezos, 2022–2023, all sold out. They were first published on fxhash, which has since closed; each one lives on its seeded.art page with its own notes.</p></div>
-<div class="list">${EARLIER.map(e => `<a class="row" href="${e.url}"><span class="e1">${esc(e.title)}</span><span class="b">${e.year}</span><span class="e3">${esc(e.ed)}</span><span class="e4">View →</span></a>`).join('')}</div></section>
-
-<section class="wrap block" id="collect"><h2>Collect</h2><div class="cards3">
-<div class="box"><p class="k">Minting now · Base</p><p class="n">BONJOY</p><p class="d">Mint a skull, or buy and sell skulls already minted, on OpenSea.</p><div class="bs"><a class="btn dark" href="${L.mint}">Mint</a><a class="btn" href="${L.opensea}">Secondary market</a></div></div>
-<div class="box"><p class="k">Secondary · Tezos</p><p class="n">Earlier collections</p><p class="d">All sixteen collections from 2022–2023 are sold out, so works are collected from their holders on objkt, the Tezos marketplace. Every work can also be reached from its seeded.art page.</p><div class="bs"><a class="btn dark" href="${L.objkt}">Buy on objkt</a><a class="btn" href="${L.seed}">Browse on seeded.art</a></div></div>
-<div class="box"><p class="k m">Not yet released</p><p class="n">New series</p><p class="d">The other series on this site have not been released yet. Follow on X to hear first when the next one opens.</p><div class="bs"><a class="btn" href="${L.x}">@chistaai on X</a></div></div>
-</div></section>
-
-<section class="wrap about" id="about"><h2>About</h2><div class="txt">
-<p>I’m Chista, a painter, illustrator and architect who works in code. Since 2022 I have been turning my drawings and paintings into generative systems: cubist women, Japanese warriors, rugs, gardens, marbled paper, abstract fields of colour.</p>
-<p>Most of my time goes into the tools. Each series gets its own engine, written for that work alone: a watercolour that bleeds on washi, a pastel that stays wet, a wool pile you could almost touch. The projects are where those techniques grow.</p>
-<p>Every work is signed by hand with my Chista signature and my red 神秘 seal.</p>
-<p class="small">Previous releases: sixteen collections on Tezos (2022–2023, <a href="${L.seed}">see them on seeded.art</a>), Verse, Highlight. BONJOY on Base, 2026.</p>
-</div></section>`;
-}
-
-function project(id) {
-  const i = DATA.findIndex(d => d.id === id), p = DATA[i];
-  const prev = DATA[(i - 1 + DATA.length) % DATA.length], next = DATA[(i + 1) % DATA.length];
-  const nAnim = p.vids.filter(v => v).length;
-  const count = p.id === 'bonjoy' ? p.imgs.length + ' animated outputs, each a six-second loop' : p.imgs.length + ' outputs shown' + (nAnim ? ' · ' + nAnim + ' animated' : '') + (p.video ? ' · one recording' : '');
-  const label = p.isNew ? ' · new, not yet released' : '';
-  return `<div class="wrap proj">
-<div class="pnav"><a href="#works" style="padding:10px 0;font-size:15px">← All works</a><div class="pn"><a href="#p/${prev.id}">← ${esc(prev.title)}</a><a href="#p/${next.id}">${esc(next.title)} →</a></div></div>
-<div class="pbody"><div class="stagecol"><div class="stage" id="stage"></div>
-<div class="sbar"><button class="btn" id="slide">▶ Slideshow</button><span>Full-screen, plays every output in turn · tap to leave</span></div><div class="thumbs">${p.imgs.map((s, n) => `<button data-n="${n}" aria-label="Output ${n + 1}"${p.vids[n] && p.id !== 'bonjoy' ? ' class="anim"' : ''}><img loading="lazy" src="${s}" alt=""></button>`).join('')}${p.video ? '<button class="play" data-n="video">▶ Watch it paint</button>' : ''}</div></div>
-<aside><p class="yr">${p.year}${label}</p><h1>${esc(p.title)}</h1>${p.sub ? `<p class="sub">${esc(p.sub)}</p>` : ''}<p class="line">${esc(p.line)}</p>
-${p.released ? `<div class="acts"><a class="btn red" href="${L.mint}">Mint</a><a class="btn" href="${L.opensea}">OpenSea</a></div>` : ''}
-${p.ext ? `<div class="acts"><a class="btn" href="${p.ext.url}">${esc(p.ext.label)} →</a><span>${esc(p.ext.note)}</span></div>` : ''}
-<div class="acts"><a class="btn" href="#" id="infobtn">Info</a></div>
-<div class="info" id="info">${p.info.map(t => `<p>${esc(t)}</p>`).join('')}${p.tech ? `<p class="tech">${esc(p.tech)}</p>` : ''}</div>
-<p class="count">${count}</p></aside></div></div>`;
-}
-
-let cur = null, sx = null, sy = null, autoT = null, lbAuto = false;
-const lb = document.createElement('div'); lb.id = 'lb';
-lb.innerHTML = '<div class="lbin"></div><button class="lbx" aria-label="Close">×</button><button class="lbp" aria-label="Previous">‹</button><button class="lbn" aria-label="Next">›</button><div class="lbcap"><b></b><span></span></div>';
-document.body.appendChild(lb);
-function lbItems(p) { const a = p.imgs.map((s, n) => n); if (p.video) a.push('video'); return a; }
-function media(p, n, o) {
+const pad = n => String(n).padStart(2, '0');
+const words = t => esc(t).split(' ').map(w => `<span class="mask" style="display:inline-block"><span>${w}</span></span>`).join(' ');
+function playVid(v) { if (!v) return; v.muted = true; v.defaultMuted = true; v.setAttribute('muted', ''); const p = v.play(); if (p && p.catch) p.catch(() => {}); }
+function media(p, n, loop) {
   const px = p.id === 'bonjoy' ? ' class="px"' : '';
-  if (n === 'video') return `<video src="${p.video}" muted playsinline autoplay ${o.loop ? 'loop' : ''} ${o.controls ? 'controls' : ''}></video>`;
-  if (p.vids[n]) return `<video${px} src="${p.vids[n]}" poster="${p.imgs[n]}" muted playsinline autoplay ${o.loop ? 'loop' : ''}></video>`;
+  if (n === 'video') return `<video src="${p.video}" muted playsinline autoplay ${loop ? 'loop' : ''}></video>`;
+  if (p.vids[n]) return `<video${px} src="${p.vids[n]}" poster="${p.imgs[n]}" muted playsinline autoplay ${loop ? 'loop' : ''}></video>`;
   return `<img src="${p.imgs[n]}" alt="${esc(p.title)}, output ${n + 1}">`;
 }
-function playVid(v) { if (!v) return; v.muted = true; v.defaultMuted = true; v.setAttribute('muted', ''); const pr = v.play(); if (pr && pr.catch) pr.catch(() => {}); }
+
+/* ===================== SHOWCASE ===================== */
+const show = $('#show'); let si = 0, sT = null, paused = false, sBusy = false, barAnim = null;
+DATA.forEach((d, i) => {
+  const s = document.createElement('div'); s.className = 'slide'; s.dataset.i = i;
+  const first = d.id === 'bonjoy' ? `<video class="px" src="${d.vids[1]}" poster="${d.imgs[1]}" muted playsinline loop></video>` : `<img src="${d.imgs[0]}" alt="${esc(d.title)}" ${i > 1 ? 'loading="lazy"' : ''}>`;
+  s.innerHTML = `<div class="meta"><span class="num rise">${pad(i + 1)} — ${pad(DATA.length)}${d.released ? ' · <b style="color:var(--red);font-weight:500">Minting now</b>' : d.isNew ? ' · New' : ''}</span>
+<h2>${words(d.title)}</h2>${d.sub ? `<span class="sub rise">${esc(d.sub)}</span>` : ''}<p class="ln rise">${esc(d.line)}</p>
+<div class="acts rise"><a class="pill" href="#p/${d.id}">Discover →</a>${d.released ? `<a class="pill red" href="${L.mint}">Mint</a>` : ''}</div></div>
+<div class="art"><div class="wrapi">${first}</div></div>`;
+  s.querySelector('.art').onclick = () => { location.hash = 'p/' + d.id; };
+  show.appendChild(s);
+});
+const slides = [...show.querySelectorAll('.slide')];
+function goSlide(n, instant) {
+  n = (n + slides.length) % slides.length;
+  const old = slides[si];
+  if (old && n !== si) { old.classList.remove('cur', 'in'); old.classList.add('gone'); const ov = old.querySelector('video'); setTimeout(() => { old.classList.remove('gone'); if (ov) ov.pause(); }, 1300); }
+  si = n; const s = slides[si];
+  s.classList.remove('gone');
+  requestAnimationFrame(() => { s.classList.add('cur'); setTimeout(() => s.classList.add('in'), instant ? 0 : 350); });
+  playVid(s.querySelector('video'));
+  $('#bg').style.background = `radial-gradient(120% 90% at 75% 45%, ${DATA[si].tint} 0%, #F5F2EC 70%)`;
+  $('#cnt').textContent = pad(si + 1) + ' / ' + pad(slides.length);
+  runBar();
+}
+function runBar() {
+  clearTimeout(sT); const b = $('#bar');
+  if (barAnim) barAnim.cancel();
+  if (paused || !document.body.classList.contains('sh')) { b.style.transform = 'scaleX(0)'; return; }
+  const d = DATA[si].id === 'bonjoy' ? 9000 : 7000;
+  barAnim = b.animate([{ transform: 'scaleX(0)' }, { transform: 'scaleX(1)' }], { duration: d, easing: 'linear', fill: 'forwards' });
+  sT = setTimeout(() => goSlide(si + 1), d);
+}
+function step(d) { if (sBusy) return; sBusy = true; setTimeout(() => sBusy = false, 1100); goSlide(si + d); }
+$('#prev').onclick = () => step(-1); $('#next').onclick = () => step(1);
+$('#pause').onclick = () => { paused = !paused; $('#pause').textContent = paused ? 'Play' : 'Pause'; runBar(); };
+show.addEventListener('wheel', e => { if (Math.abs(e.deltaY) > 18) step(e.deltaY > 0 ? 1 : -1); }, { passive: true });
+let tsx = null, tsy = null;
+show.addEventListener('touchstart', e => { tsx = e.touches[0].clientX; tsy = e.touches[0].clientY; }, { passive: true });
+show.addEventListener('touchend', e => { if (tsx === null) return; const dx = e.changedTouches[0].clientX - tsx, dy = e.changedTouches[0].clientY - tsy; tsx = null;
+  if (Math.max(Math.abs(dx), Math.abs(dy)) > 45) step((Math.abs(dy) > Math.abs(dx) ? dy : dx) < 0 ? 1 : -1); });
+document.addEventListener('keydown', e => { if ($('#lb').classList.contains('open') || !document.body.classList.contains('sh')) return;
+  if (['ArrowDown', 'ArrowRight', 'PageDown', ' '].includes(e.key)) { e.preventDefault(); step(1); }
+  if (['ArrowUp', 'ArrowLeft', 'PageUp'].includes(e.key)) { e.preventDefault(); step(-1); }
+  if (e.key === 'Enter') location.hash = 'p/' + DATA[si].id; });
+
+/* ===================== PROJECT ===================== */
+let cur = null;
+function renderProject(p) {
+  const i = DATA.indexOf(p), nx = DATA[(i + 1) % DATA.length];
+  const items = p.imgs.map((s, n) => n); if (p.video) items.push('video');
+  const proj = $('#proj');
+  proj.innerHTML = `<div class="pgrid"><div><div class="stage" id="stage"></div>
+<div class="sctl"><button class="arw" id="sp" aria-label="Previous output">←</button><button class="arw" id="sn" aria-label="Next output">→</button><span id="scnt"></span><button class="play" id="playall">▶ Slideshow</button></div>
+<div class="strip">${items.map(n => n === 'video' ? `<button data-n="video" class="anim"><img src="${p.imgs[0]}" alt=""></button>` : `<button data-n="${n}" ${p.vids[n] && p.id !== 'bonjoy' ? 'class="anim"' : ''}><img loading="lazy" src="${p.imgs[n]}" alt=""></button>`).join('')}</div></div>
+<div class="ptxt"><span class="yr rise">${p.year}${p.released ? ' · Released · minting now' : p.isNew ? ' · New, not yet released' : ''}</span>
+<h1>${words(p.title)}</h1>${p.sub ? `<span class="sub rise">${esc(p.sub)}</span>` : ''}
+<p class="ln rise">${esc(p.line)}</p>
+${p.released ? `<div class="acts rise"><a class="pill red" href="${L.mint}">Mint on OpenSea</a><a class="pill" href="${L.opensea}">Secondary market</a></div>` : ''}
+${p.ext ? `<div class="acts rise"><a class="pill" href="${p.ext.url}">${esc(p.ext.label)} →</a><span class="note">${esc(p.ext.note)}</span></div>` : ''}
+<div class="info">${p.info.map((t, k) => `<p class="rise" style="transition-delay:${.35 + k * .12}s">${esc(t)}</p>`).join('')}${p.tech ? `<p class="tech rise" style="transition-delay:${.4 + p.info.length * .12}s">${esc(p.tech)}</p>` : ''}</div>
+<a class="nextp rise" href="#p/${nx.id}"><small>Next work</small><b>${esc(nx.title)} →</b></a></div></div>`;
+  cur = { p, n: 0, items };
+  proj.querySelectorAll('.strip button').forEach(b => b.onclick = () => showOut(b.dataset.n === 'video' ? 'video' : +b.dataset.n));
+  $('#sp').onclick = () => stepOut(-1); $('#sn').onclick = () => stepOut(1);
+  $('#playall').onclick = () => openLb(true);
+  const st = $('#stage'); st.onclick = () => openLb(false);
+  let x0 = null; st.addEventListener('touchstart', e => { x0 = e.touches[0].clientX; }, { passive: true });
+  st.addEventListener('touchend', e => { if (x0 === null) return; const dx = e.changedTouches[0].clientX - x0; x0 = null; if (Math.abs(dx) > 45) { e.preventDefault(); stepOut(dx < 0 ? 1 : -1); } });
+  showOut(0, true);
+  requestAnimationFrame(() => setTimeout(() => proj.classList.add('in'), 450));
+}
+function showOut(n, first) {
+  const st = $('#stage'); cur.n = n;
+  st.querySelectorAll('.f').forEach(f => { f.classList.remove('on'); f.classList.add('off'); setTimeout(() => f.remove(), 1200); });
+  const f = document.createElement('div'); f.className = 'f'; f.innerHTML = media(cur.p, n, true); st.appendChild(f);
+  requestAnimationFrame(() => requestAnimationFrame(() => f.classList.add('on')));
+  playVid(f.querySelector('video'));
+  $('#scnt').textContent = pad(cur.items.indexOf(n) + 1) + ' / ' + pad(cur.items.length);
+  document.querySelectorAll('.strip button').forEach(b => b.classList.toggle('on', String(b.dataset.n) === String(n)));
+}
+function stepOut(d) { const k = cur.items.indexOf(cur.n); showOut(cur.items[(k + d + cur.items.length) % cur.items.length]); }
+$('#close').onclick = () => { location.hash = ''; };
+
+/* ===================== LIGHTBOX / SLIDESHOW ===================== */
+const lb = $('#lb'); let lbAuto = false, lbT = null;
 function lbRender() {
-  clearTimeout(autoT);
+  clearTimeout(lbT);
   const { p, n } = cur, box = lb.querySelector('.lbin');
-  const f = document.createElement('div'); f.className = 'lbf'; f.innerHTML = media(p, n, { loop: !lbAuto });
-  box.querySelectorAll('.lbf').forEach(o => { o.classList.add('out'); setTimeout(() => o.remove(), 900); });
+  const f = document.createElement('div'); f.className = 'lbf'; f.innerHTML = media(p, n, !lbAuto);
+  box.querySelectorAll('.lbf').forEach(o => { o.classList.add('out'); setTimeout(() => o.remove(), 1000); });
   box.appendChild(f); requestAnimationFrame(() => requestAnimationFrame(() => f.classList.add('in')));
-  const it = lbItems(p);
-  lb.querySelector('.lbcap b').textContent = p.title + (p.sub ? '  ' + p.sub : '');
-  lb.querySelector('.lbcap span').textContent = (it.indexOf(n) + 1) + ' / ' + it.length;
+  lb.querySelector('.cap b').textContent = p.title + (p.sub ? '  ' + p.sub : '');
+  lb.querySelector('.cap span').textContent = pad(cur.items.indexOf(n) + 1) + ' / ' + pad(cur.items.length);
   const v = f.querySelector('video'); playVid(v);
   if (lbAuto) {
-    if (v) { let done = false; const nx = () => { if (!done) { done = true; step(1); } };
-      v.onended = nx; v.onloadedmetadata = () => { clearTimeout(autoT); autoT = setTimeout(nx, (isFinite(v.duration) ? v.duration : 6) * 1000 + 1500); };
-      autoT = setTimeout(nx, 12000); }
-    else autoT = setTimeout(() => step(1), 5500);
+    if (v) { let done = false; const go = () => { if (!done) { done = true; lbStep(1); } };
+      v.onended = go; v.onloadedmetadata = () => { clearTimeout(lbT); lbT = setTimeout(go, (isFinite(v.duration) ? v.duration : 6) * 1000 + 1500); };
+      lbT = setTimeout(go, 14000); }
+    else lbT = setTimeout(() => lbStep(1), 5500);
   }
 }
-function openLb(auto) { lbAuto = !!auto; lb.classList.toggle('auto', lbAuto); lb.classList.add('open'); document.body.style.overflow = 'hidden';
-  lb.querySelector('.lbin').innerHTML = ''; lbRender();
+function lbStep(d) { const k = cur.items.indexOf(cur.n); cur.n = cur.items[(k + d + cur.items.length) % cur.items.length]; lbRender(); }
+function openLb(auto) { lbAuto = !!auto; lb.classList.toggle('auto', lbAuto); lb.classList.add('open'); document.body.style.overflow = 'hidden'; lb.querySelector('.lbin').innerHTML = ''; lbRender();
   if (lbAuto && lb.requestFullscreen) lb.requestFullscreen().catch(() => {}); }
-function closeLb() { clearTimeout(autoT); lb.classList.remove('open'); document.body.style.overflow = ''; lb.querySelector('.lbin').innerHTML = '';
-  if (document.fullscreenElement) document.exitFullscreen().catch(() => {}); if (cur) show(cur.p, cur.n); }
-function step(d) { const it = lbItems(cur.p); const i = (it.indexOf(cur.n) + d + it.length) % it.length; cur.n = it[i]; lbRender(); }
-lb.querySelector('.lbx').onclick = e => { e.stopPropagation(); closeLb(); };
-lb.querySelector('.lbp').onclick = e => { e.stopPropagation(); step(-1); };
-lb.querySelector('.lbn').onclick = e => { e.stopPropagation(); step(1); };
-lb.onclick = () => { if (lbAuto) closeLb(); };
-lb.querySelector('.lbin').addEventListener('click', e => { if (!lbAuto && e.target === e.currentTarget) closeLb(); });
-let tx = null, ty = null;
-lb.addEventListener('touchstart', e => { if (e.touches.length === 1) { tx = e.touches[0].clientX; ty = e.touches[0].clientY; } else tx = null; }, { passive: true });
-lb.addEventListener('touchend', e => { if (tx === null) return; const dx = e.changedTouches[0].clientX - tx, dy = e.changedTouches[0].clientY - ty; tx = null;
-  if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) { e.preventDefault(); step(dx < 0 ? 1 : -1); } else if (dy > 90 && Math.abs(dy) > Math.abs(dx)) closeLb(); });
-document.addEventListener('keydown', e => { if (!lb.classList.contains('open')) return; if (e.key === 'Escape') closeLb(); if (e.key === 'ArrowRight') step(1); if (e.key === 'ArrowLeft') step(-1); });
+function closeLb() { clearTimeout(lbT); lb.classList.remove('open'); document.body.style.overflow = ''; lb.querySelector('.lbin').innerHTML = '';
+  if (document.fullscreenElement) document.exitFullscreen().catch(() => {}); if (cur) showOut(cur.n); }
+lb.querySelector('.x').onclick = e => { e.stopPropagation(); closeLb(); };
+lb.querySelector('.p').onclick = e => { e.stopPropagation(); lbStep(-1); };
+lb.querySelector('.nx').onclick = e => { e.stopPropagation(); lbStep(1); };
+lb.onclick = e => { if (lbAuto || e.target.classList.contains('lbf')) closeLb(); };
+let lx = null, ly = null;
+lb.addEventListener('touchstart', e => { lx = e.touches[0].clientX; ly = e.touches[0].clientY; }, { passive: true });
+lb.addEventListener('touchend', e => { if (lx === null) return; const dx = e.changedTouches[0].clientX - lx, dy = e.changedTouches[0].clientY - ly; lx = null;
+  if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) { e.preventDefault(); lbStep(dx < 0 ? 1 : -1); } else if (dy > 90) closeLb(); });
+document.addEventListener('keydown', e => { if (!lb.classList.contains('open')) return; if (e.key === 'Escape') closeLb(); if (e.key === 'ArrowRight') lbStep(1); if (e.key === 'ArrowLeft') lbStep(-1); });
 document.addEventListener('fullscreenchange', () => { if (!document.fullscreenElement && lbAuto && lb.classList.contains('open')) closeLb(); });
 
-function show(p, n) {
-  const st = $('#stage');
-  const it = lbItems(p), k = it.indexOf(n);
-  st.innerHTML = media(p, n, { loop: true, controls: n === 'video' }) + `<button class="sp" aria-label="Previous">‹</button><button class="sn" aria-label="Next">›</button><button class="zoom" aria-label="View full screen">⤢</button><span class="cnt">${k + 1} / ${it.length}</span>`;
-  cur = { p, n };
-  playVid(st.querySelector('video'));
-  const go = d => show(p, it[(k + d + it.length) % it.length]);
-  st.querySelector('.sp').onclick = e => { e.stopPropagation(); go(-1); };
-  st.querySelector('.sn').onclick = e => { e.stopPropagation(); go(1); };
-  st.querySelector('.zoom').onclick = e => { e.stopPropagation(); openLb(false); };
-  const im = st.querySelector('img'); if (im) im.onclick = () => openLb(false);
-  st.ontouchstart = e => { if (e.touches.length === 1) { sx = e.touches[0].clientX; sy = e.touches[0].clientY; } else sx = null; };
-  st.ontouchend = e => { if (sx === null) return; const dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy; sx = null; if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) { e.preventDefault(); go(dx < 0 ? 1 : -1); } };
-  document.querySelectorAll('.thumbs button').forEach(b => b.classList.toggle('on', String(b.dataset.n) === String(n)));
+/* ===================== INDEX ===================== */
+function renderIndex() {
+  $('#index').innerHTML = `<div class="ih"><h1>Index</h1><p>Every series begins with my own drawings and paintings, and each one has its own engine, written for that work alone.</p></div>
+${DATA.map((d, i) => `<a class="irow reveal" href="#p/${d.id}"><span class="n">${pad(i + 1)}</span><img loading="lazy" src="${d.imgs[0]}" alt=""><span class="t">${esc(d.title)}${d.released ? '<span>Minting now</span>' : d.isNew ? '<span style="color:var(--mute)">New</span>' : ''}</span><span class="y">${d.year}</span><span class="l">${esc(d.line)}</span></a>`).join('')}
+<div class="sec" id="earlier"><h2 class="reveal">Earlier works</h2><p class="lead reveal">Sixteen generative collections released on Tezos, 2022–2023, all sold out. Each one lives on its seeded.art page with its own notes.</p>
+${EARLIER.map(e => `<a class="erow reveal" href="${e.url}"><span class="t">${esc(e.title)}</span><span>${e.year}</span><span class="ed">${esc(e.ed)}</span><span class="go">View →</span></a>`).join('')}</div>
+<div class="sec" id="collect"><h2 class="reveal">Collect</h2><div class="cards">
+<div class="box reveal"><p class="k">Minting now · Base</p><p class="nm">BONJOY</p><p>Mint a skull, or buy and sell skulls already minted, on OpenSea.</p><div class="bs"><a class="pill red" href="${L.mint}">Mint</a><a class="pill" href="${L.opensea}">Secondary market</a></div></div>
+<div class="box reveal"><p class="k">Secondary · Tezos</p><p class="nm">Earlier collections</p><p>All sixteen collections are sold out; works are collected from their holders on objkt, and every work can be reached from its seeded.art page.</p><div class="bs"><a class="pill" href="${L.objkt}">objkt</a><a class="pill" href="${L.seed}">seeded.art</a></div></div>
+<div class="box reveal"><p class="k" style="color:var(--mute)">Not yet released</p><p class="nm">New series</p><p>The other series on this site have not been released yet. Follow on X to hear first when the next one opens.</p><div class="bs"><a class="pill" href="${L.x}">@chistaai</a></div></div>
+</div></div>
+<div class="sec about" id="about"><h2 class="reveal">About</h2><div class="tx">
+<p class="reveal">I’m Chista, a painter, illustrator and architect who works in code. Since 2022 I have been turning my drawings and paintings into generative systems: cubist women, Japanese warriors, rugs, gardens, marbled paper, abstract fields of colour.</p>
+<p class="reveal">Most of my time goes into the tools. Each series gets its own engine, written for that work alone: a watercolour that bleeds on washi, a pastel that stays wet, a wool pile you could almost touch. The projects are where those techniques grow.</p>
+<p class="s reveal">Previous releases: sixteen collections on Tezos (2022–2023), Verse, Highlight. BONJOY on Base, 2026.</p></div></div>
+<footer><span>© 2026 Chista</span><span class="lk"><a href="${L.x}">X</a><a href="${L.opensea}">OpenSea</a><a href="${L.objkt}">objkt</a><a href="${L.seed}">seeded.art</a></span></footer>`;
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('vis'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -8% 0px' });
+  document.querySelectorAll('#index .reveal').forEach((el, k) => { el.style.transitionDelay = Math.min(k % 8, 7) * 0.05 + 's'; io.observe(el); });
 }
-function stopAuto() {}
-function toggleAuto() { if (!cur) return; openLb(true); }
 
+/* ===================== ROUTER ===================== */
+let mode = null;
 function route() {
-  const h = location.hash.slice(1);
+  const h = location.hash.slice(1), B = document.body, wipe = $('#wipe');
+  document.querySelectorAll('nav a').forEach(a => a.classList.remove('on'));
   if (h.startsWith('p/') && byId(h.slice(2))) {
     const p = byId(h.slice(2));
-    app.innerHTML = project(p.id);
     document.title = p.title + ' — Chista';
-    show(p, 0);
-    stopAuto();
-    document.querySelectorAll('.thumbs button').forEach(b => b.onclick = () => { stopAuto(); show(p, b.dataset.n === 'video' ? 'video' : +b.dataset.n); $('#stage').scrollIntoView({ behavior: 'smooth', block: 'nearest' }); });
-    $('#slide').onclick = toggleAuto;
-    $('#infobtn').onclick = e => { e.preventDefault(); const o = $('#info').classList.toggle('open'); e.target.textContent = o ? 'Close info' : 'Info'; };
-    window.scrollTo(0, 0);
+    if (mode !== 'proj') { wipe.className = ''; void wipe.offsetWidth; wipe.className = 'go'; }
+    $('#proj').classList.remove('in');
+    setTimeout(() => { B.className = 'dark'; renderProject(p); window.scrollTo(0, 0); wipe.className = ''; clearTimeout(sT);
+      const sl = slides[DATA.indexOf(p)]; if (sl) { slides.forEach(x => x.classList.remove('cur', 'in')); si = DATA.indexOf(p); } }, mode === 'proj' ? 0 : 650);
+    mode = 'proj';
+  } else if (h.startsWith('index')) {
+    document.title = 'Index — Chista';
+    B.className = 'idx'; mode = 'index'; clearTimeout(sT);
+    renderIndex();
+    const sub = h.split('/')[1]; const el = sub && document.getElementById(sub);
+    setTimeout(() => { if (el) el.scrollIntoView({ behavior: 'smooth' }); else window.scrollTo(0, 0); }, 60);
+    document.querySelector(sub === 'about' ? 'nav a[data-r=about]' : 'nav a[data-r=index]').classList.add('on');
   } else {
-    if (!$('#works')) { app.innerHTML = home(); document.title = 'Chista — generative paintings'; }
-    const el = h && document.getElementById(h);
-    if (el) el.scrollIntoView(); else if (!h) window.scrollTo(0, 0);
+    document.title = 'Chista — generative paintings';
+    const fromProj = mode === 'proj';
+    if (fromProj) { wipe.className = 'back'; setTimeout(() => wipe.className = '', 1000); }
+    B.className = 'sh'; mode = 'show'; window.scrollTo(0, 0);
+    document.querySelector('nav a[data-r=show]').classList.add('on');
+    goSlide(si, true);
   }
 }
 window.addEventListener('hashchange', route);

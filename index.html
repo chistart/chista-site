@@ -36,6 +36,23 @@ nav a::after{content:'';position:absolute;left:0;right:100%;bottom:0;height:1px;
 nav a:hover::after,nav a.on::after{right:0}
 nav a.mint{color:var(--red)}
 body.dark nav a.mint{color:#E46A5E}
+.sealimg{width:34px;height:auto}
+.sigimg{height:40px;width:auto;margin-top:12px}
+body.dark .sigimg{filter:invert(1)}
+/* intro */
+#intro{position:fixed;inset:0;z-index:90;background:var(--paper);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;transition:transform 1.2s var(--ease)}
+#intro.up{transform:translateY(-100%)}
+#intro .sigbox{position:relative;height:min(76vh,120vw);aspect-ratio:1433/1560;overflow:hidden;-webkit-mask-image:url(sig.png);mask-image:url(sig.png);-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-position:center;mask-position:center;-webkit-mask-size:100% 100%;mask-size:100% 100%}
+@keyframes write{to{clip-path:inset(-2% -20% -2% 0)}}
+#intro .mosaic{position:absolute;left:-40%;top:-40%;width:180%;height:180%;display:grid;grid-template-columns:repeat(6,1fr);animation:pan 16s linear infinite alternate}
+#intro .mosaic div{overflow:hidden}
+#intro .mosaic img{width:100%;height:100%;object-fit:cover;transform:scale(1.9)}
+@keyframes pan{from{transform:translate(0,0) rotate(-4deg)}to{transform:translate(18%,14%) rotate(2deg)}}
+#intro .sigwrap{position:relative;clip-path:inset(-2% 100% -2% 0);animation:write 2.2s var(--ease) .3s forwards}
+#intro .seal2{position:absolute;width:12%;right:4%;top:60%;opacity:0;animation:stamp .6s var(--out) 2.4s forwards}
+@keyframes stamp{from{opacity:0;transform:scale(1.6) rotate(-8deg)}to{opacity:1;transform:none}}
+#intro p{position:absolute;bottom:28px;margin:0;font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:var(--mute);opacity:0;animation:fadein 1s ease 2.6s forwards}
+@keyframes fadein{to{opacity:1}}
 /* reveal helpers */
 .mask{display:block;overflow:hidden}
 .mask>span{display:inline-block;transform:translateY(105%);transition:transform 1.1s var(--out)}
@@ -185,13 +202,14 @@ footer .lk{display:flex;gap:26px;flex-wrap:wrap}
  .erow{grid-template-columns:minmax(0,1fr) 50px 70px}
  .erow .ed{display:none}
 }
-@media (max-width:600px){nav{gap:14px;font-size:11px}.logo b{display:none}}
+@media (max-width:600px){nav{gap:14px;font-size:11px}.sigimg{display:none}}
 </style>
 </head>
 <body>
-<header><a class="logo" href="#"><span class="seal">神<br>秘</span><b>Chista</b></a>
+<header><a class="logo" href="#" aria-label="Chista"><img class="sealimg" src="seal.png" alt=""><img class="sigimg" src="sig.png" alt="Chista"></a>
 <nav><a href="#" data-r="show">Works</a><a href="#index" data-r="index">Index</a><a href="#index/about" data-r="about">About</a><a class="mint" href="#p/bonjoy">Mint</a></nav></header>
 <button class="close" id="close" aria-label="Back to works">×</button>
+<div id="intro" hidden><div class="sigwrap"><div class="sigbox"><div class="mosaic" id="mosaic"></div></div><img class="seal2" src="seal.png" alt=""></div><p>Generative paintings · tap to enter</p></div>
 <main>
 <section id="show" aria-label="Works"><div class="bg" id="bg"></div></section>
 <div class="ctl" id="ctl"><button class="arw" id="prev" aria-label="Previous work">↑</button><button class="arw" id="next" aria-label="Next work">↓</button><span id="cnt">01 / 18</span><div class="bar"><i id="bar"></i></div><button id="pause">Pause</button></div>
@@ -244,7 +262,7 @@ function goSlide(n, instant) {
 function runBar() {
   clearTimeout(sT); const b = $('#bar');
   if (barAnim) barAnim.cancel();
-  if (paused || !document.body.classList.contains('sh')) { b.style.transform = 'scaleX(0)'; return; }
+  if (paused || introOn || !document.body.classList.contains('sh')) { b.style.transform = 'scaleX(0)'; return; }
   const d = DATA[si].id === 'bonjoy' ? 9000 : 7000;
   barAnim = b.animate([{ transform: 'scaleX(0)' }, { transform: 'scaleX(1)' }], { duration: d, easing: 'linear', fill: 'forwards' });
   sT = setTimeout(() => goSlide(si + 1), d);
@@ -354,6 +372,18 @@ ${EARLIER.map(e => `<a class="erow reveal" href="${e.url}"><span class="t">${esc
   document.querySelectorAll('#index .reveal').forEach((el, k) => { el.style.transitionDelay = Math.min(k % 8, 7) * 0.05 + 's'; io.observe(el); });
 }
 
+/* ===================== INTRO ===================== */
+let introOn = false;
+function intro() {
+  const el = $('#intro'); let seen = false; try { seen = sessionStorage.getItem('ci') === '1'; } catch (e) {}
+  if (seen || location.hash.slice(1)) { el.remove(); return; }
+  introOn = true; el.hidden = false;
+  const pool = []; DATA.forEach(d => d.imgs.slice(0, 3).forEach(s => pool.push(s)));
+  for (let k = pool.length - 1; k > 0; k--) { const j = Math.floor(Math.random() * (k + 1)); [pool[k], pool[j]] = [pool[j], pool[k]]; }
+  $('#mosaic').innerHTML = pool.slice(0, 36).map(s => `<div><img src="${s}" alt=""></div>`).join('');
+  const leave = () => { if (!introOn) return; introOn = false; try { sessionStorage.setItem('ci', '1'); } catch (e) {} el.classList.add('up'); setTimeout(() => el.remove(), 1300); runBar(); };
+  el.onclick = leave; setTimeout(leave, 5200);
+}
 /* ===================== ROUTER ===================== */
 let mode = null;
 function route() {
@@ -384,6 +414,7 @@ function route() {
   }
 }
 window.addEventListener('hashchange', route);
+intro();
 route();
 </script>
 </body>

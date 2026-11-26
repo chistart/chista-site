@@ -55,32 +55,17 @@ body.dark .sigimg{filter:invert(1)}
 @keyframes flowA{from{transform:scale(1.1) rotate(-6deg) translate(-6%,4%)}to{transform:scale(1.35) rotate(8deg) translate(7%,-5%)}}
 @keyframes flowB{from{transform:scale(1.3) rotate(10deg) translate(5%,6%)}to{transform:scale(1.05) rotate(-4deg) translate(-8%,-3%)}}
 @keyframes flowC{from{transform:scale(1.15) rotate(0) translate(0,-7%)}to{transform:scale(1.4) rotate(14deg) translate(-4%,8%)}}
-#intro .stage3d{perspective:1800px;perspective-origin:50% 40%}
-#intro .sheet{position:relative;width:min(62vh,84vw);aspect-ratio:1433/1560;transform-style:preserve-3d;transition:transform 1.3s var(--ease),opacity 1.3s ease}
-#intro .sheet::before{content:'';position:absolute;left:0;top:0;width:50%;height:50%;box-shadow:0 18px 40px -12px rgba(60,40,20,.35);animation:shad 2.6s var(--ease) .2s forwards}
-@keyframes shad{45%{width:50%;height:100%}100%{width:100%;height:100%;box-shadow:0 40px 80px -30px rgba(60,40,20,.38),0 2px 6px rgba(60,40,20,.08)}}
-#intro .pp,#intro .fl{position:absolute;background:#FCFAF5;backface-visibility:hidden}
-#intro .tl{left:0;top:0;width:50%;height:50%}
-#intro .fl .bk{position:absolute;inset:0;background:#EFE9DE;transform:rotateY(180deg);backface-visibility:hidden}
-#intro .bl{left:0;top:50%;width:50%;height:50%;transform-origin:50% 0;transform:rotateX(180deg);animation:unX 1.1s var(--ease) .35s forwards;transform-style:preserve-3d}
-#intro .bl .bk{transform:rotateX(180deg)}
-#intro .rt{left:50%;top:0;width:50%;height:100%;transform-origin:0 50%;transform:rotateY(-180deg);clip-path:inset(0 0 50% 0);animation:unY 1.2s var(--ease) 1.35s forwards,unclip 1.1s var(--ease) .35s forwards;transform-style:preserve-3d}
-@keyframes unX{to{transform:rotateX(0)}}
-@keyframes unY{to{transform:rotateY(0)}}
-@keyframes unclip{to{clip-path:inset(0 0 0 0)}}
-#intro .fl::after{content:'';position:absolute;inset:0;background:linear-gradient(var(--g,90deg),rgba(70,50,30,.22),rgba(255,255,255,0));opacity:1;animation:shade 1.1s var(--ease) forwards;animation-delay:inherit;pointer-events:none}
-#intro .bl::after{--g:180deg;animation-delay:.35s}#intro .rt::after{--g:90deg;animation-delay:1.35s}
-@keyframes shade{0%{opacity:.2}50%{opacity:1}100%{opacity:.35}}
-#intro .creases{position:absolute;inset:0;pointer-events:none;opacity:0;animation:fadein .8s ease 2.4s forwards;
- background:linear-gradient(90deg,transparent calc(50% - 1px),rgba(90,70,45,.16) calc(50% - 1px),rgba(255,255,255,.7) calc(50% + 1px),transparent calc(50% + 1px)),
- linear-gradient(180deg,transparent calc(50% - 1px),rgba(90,70,45,.14) calc(50% - 1px),rgba(255,255,255,.7) calc(50% + 1px),transparent calc(50% + 1px)),
- linear-gradient(90deg,rgba(90,70,45,.05),transparent 22%,transparent 78%,rgba(90,70,45,.05)),
- radial-gradient(60% 50% at 25% 25%,rgba(255,255,255,.35),transparent),radial-gradient(60% 50% at 75% 75%,rgba(90,70,45,.06),transparent)}
-#intro .sheet .sigwrap{position:absolute;inset:7% 9% 7% 9%;display:flex;align-items:center;justify-content:center;transform:translateZ(1px)}
-#intro .sheet .sigbox{height:100%;width:auto}
-#intro .sheet .seal2{width:13%;right:2%;top:62%}
+#intro .sigwrap{height:min(54vh,80vw);aspect-ratio:1433/1560;perspective:1400px;transform-style:preserve-3d}
+#intro .facets{position:absolute;inset:0;transform-style:preserve-3d;animation:ball 2.4s var(--ease) .15s both}
+@keyframes ball{0%{transform:scale(.32) rotate(-28deg)}55%{transform:scale(.62) rotate(-8deg)}100%{transform:none}}
+#intro .fc{position:absolute;inset:0;background-size:cover;background-position:center;-webkit-mask-image:url(sig.png);mask-image:url(sig.png);-webkit-mask-size:100% 100%;mask-size:100% 100%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;transition:opacity 1s ease}
+#intro .fc.gone{opacity:0}
+#intro .sigbox{opacity:0;transition:opacity 1.2s ease}
+#intro .sigbox.on{opacity:1}
+#intro .crease{position:absolute;inset:0;width:100%;height:100%;opacity:0;transition:opacity 1.2s ease;-webkit-mask-image:url(sig.png);mask-image:url(sig.png);-webkit-mask-size:100% 100%;mask-size:100% 100%;pointer-events:none}
+#intro .crease.on{opacity:1}
 #intro.fade{opacity:0;transition:opacity 1.4s ease}
-#intro .sigwrap{position:relative;clip-path:inset(-2% 100% -2% 0);animation:write 2.2s var(--ease) 2.7s forwards;transition:transform 1.2s var(--ease),opacity 1.2s ease}
+#intro .sigwrap{position:relative;transition:transform 1.2s var(--ease),opacity 1.2s ease}
 #intro .drop{position:absolute;left:50%;top:-60px;width:34px;height:34px;margin-left:-17px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background-size:cover;background-position:center;box-shadow:inset -4px -6px 10px rgba(0,0,0,.25);animation:fall .85s cubic-bezier(.55,0,1,.45) .25s forwards;z-index:3}
 @keyframes fall{0%{transform:translateY(0) scale(.7,1)}80%{transform:translateY(calc(50vh + 40px)) scale(.75,1.35)}100%{transform:translateY(calc(50vh + 52px)) scale(1.6,.35);opacity:0}}
 #intro svg.bl{position:absolute;inset:0;width:100%;height:100%;transition:opacity 1.6s ease}
@@ -88,9 +73,9 @@ body.dark .sigimg{filter:invert(1)}
 #intro svg.bl.gone{opacity:0}
 #intro.out{background:transparent;transition:background .9s ease .3s}
 #intro.out p,#intro.out .seal2{opacity:0!important;transition:opacity .4s}
-#intro .seal2{position:absolute;width:12%;right:4%;top:60%;opacity:0;animation:stamp .6s var(--out) 4.8s forwards}
+#intro .seal2{position:absolute;width:12%;right:4%;top:60%;opacity:0;animation:stamp .6s var(--out) 3.4s forwards}
 @keyframes stamp{from{opacity:0;transform:scale(1.6) rotate(-8deg)}to{opacity:1;transform:none}}
-#intro p{position:absolute;bottom:28px;margin:0;font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:var(--mute);opacity:0;animation:fadein 1s ease 5.2s forwards}
+#intro p{position:absolute;bottom:28px;margin:0;font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:var(--mute);opacity:0;animation:fadein 1s ease 3.8s forwards}
 @keyframes fadein{to{opacity:1}}
 /* reveal helpers */
 .mask{display:block;overflow:hidden}
@@ -131,14 +116,11 @@ body.dark .sigimg{filter:invert(1)}
 .ctl .arw:hover{background:var(--ink);color:var(--paper)}
 .hint{position:fixed;z-index:40;right:clamp(18px,4vw,64px);top:50%;transform:translateY(-50%) rotate(90deg);transform-origin:right center;font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--mute)}
 /* ===== transition ===== */
-#wipe{display:none;position:fixed;inset:0;z-index:45;pointer-events:none;perspective:1600px}
-#wipe i{flex:1;height:100%;transform:rotateY(calc(var(--s) * 90deg));opacity:.4;box-shadow:inset 0 0 60px rgba(0,0,0,.12)}
-#wipe i:nth-child(odd){background-image:linear-gradient(90deg,rgba(255,255,255,.05),rgba(0,0,0,.14))!important}
-#wipe i:nth-child(even){background-image:linear-gradient(90deg,rgba(0,0,0,.14),rgba(255,255,255,.05))!important}
-#wipe.in i{animation:panIn .55s var(--ease) var(--d) forwards}
-#wipe.out i{transform:none;opacity:1;animation:panOut .6s var(--ease) var(--d) forwards}
-@keyframes panIn{to{transform:rotateY(0);opacity:1}}
-@keyframes panOut{to{transform:rotateY(calc(var(--s) * -90deg));opacity:.3}}
+#wipe{display:none;position:fixed;inset:0;z-index:45;pointer-events:none;opacity:0}
+#wipe.in{opacity:1;transition:opacity .42s cubic-bezier(.4,0,.2,1)}
+#wipe.out{opacity:0;transition:opacity .65s ease}
+#proj.in .pgrid{animation:rise .9s cubic-bezier(.22,1,.36,1) both}
+@keyframes rise{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
 .fly{position:fixed;z-index:47;object-fit:contain;pointer-events:none;transition:left 1s var(--ease),top 1s var(--ease),width 1s var(--ease),height 1s var(--ease),box-shadow 1s ease;box-shadow:0 40px 90px -30px rgba(40,30,20,.45)}
 #proj{transition:opacity .55s ease}
 #proj.leaving{opacity:0}
@@ -266,10 +248,7 @@ footer .lk{display:flex;gap:26px;flex-wrap:wrap}
 <nav><a href="#" data-r="show">Works</a><a href="#index" data-r="index">Index</a><a href="#index/about" data-r="about">About</a><a class="mint" href="#p/bonjoy">Mint</a></nav></header>
 <button class="close" id="close" aria-label="Back to works">×</button>
 <svg width="0" height="0" style="position:absolute"><filter id="wcf" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.009" numOctaves="3" seed="3" result="t"/><feDisplacementMap in="SourceGraphic" in2="t" scale="90" xChannelSelector="R" yChannelSelector="G" result="d"/><feGaussianBlur in="d" stdDeviation="1.2"/></filter><filter id="liquid" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence type="fractalNoise" baseFrequency="0.006 0.009" numOctaves="2" seed="7" result="n"><animate attributeName="baseFrequency" dur="14s" values="0.006 0.009;0.011 0.006;0.006 0.009" repeatCount="indefinite"/></feTurbulence><feDisplacementMap in="SourceGraphic" in2="n" scale="70" xChannelSelector="R" yChannelSelector="G"/></filter></svg>
-<div id="intro" hidden><div class="stage3d"><div class="sheet" id="sheet">
-<div class="pp tl"></div><div class="fl bl"><i class="bk"></i></div><div class="fl rt"><i class="bk"></i></div>
-<div class="creases"></div>
-<div class="sigwrap"><div class="sigbox"><div class="ink" id="ink"></div></div><img class="seal2" src="seal.png" alt=""></div></div></div><p>Generative paintings · tap to enter</p></div>
+<div id="intro" hidden><div class="sigwrap" id="sw"><div class="facets" id="facets"></div><div class="sigbox"><div class="ink" id="ink"></div></div><svg class="crease" id="crease" viewBox="0 0 100 100" preserveAspectRatio="none"></svg><img class="seal2" src="seal.png" alt=""></div><p>Generative paintings · tap to enter</p></div>
 <main>
 <section id="show" aria-label="Works"><div class="bg" id="bg"></div></section>
 <div class="ctl" id="ctl"><button class="arw" id="prev" aria-label="Previous work">↑</button><button class="arw" id="next" aria-label="Next work">↓</button><span id="cnt">01 / 18</span><div class="bar"><i id="bar"></i></div><button id="pause">Pause</button></div>
@@ -444,13 +423,8 @@ ${EARLIER.map(e => `<a class="erow reveal" href="${e.url}"><span class="t">${esc
 /* ===================== INK BLOOM ===================== */
 const ease = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 function tween(dur, fn, done, e = ease) { const t0 = performance.now(); const f = now => { const k = Math.min(1, (now - t0) / dur); fn(e(k)); if (k < 1) requestAnimationFrame(f); else if (done) done(); }; requestAnimationFrame(f); }
-function wipeBloom(x, y, color, dur, done) {
-  const w = $('#wipe'); w.innerHTML = ''; w.style.display = 'flex'; w.className = 'in';
-  const n = innerWidth < 700 ? 4 : 6, order = x < innerWidth / 2 ? [...Array(n).keys()] : [...Array(n).keys()].reverse();
-  for (let i = 0; i < n; i++) { const p = document.createElement('i'); p.style.background = color; p.style.transformOrigin = i % 2 ? '0 50%' : '100% 50%'; p.style.setProperty('--d', order.indexOf(i) * 70 + 'ms'); p.style.setProperty('--s', i % 2 ? 1 : -1); w.appendChild(p); }
-  setTimeout(() => done && done(), 560 + n * 70);
-}
-function wipeOff() { const w = $('#wipe'); w.className = 'out'; setTimeout(() => { w.style.display = 'none'; w.innerHTML = ''; w.className = ''; }, 900); }
+function wipeBloom(x, y, color, dur, done) { const w = $('#wipe'); w.style.background = color; w.style.display = 'block'; w.className = ''; void w.offsetWidth; w.className = 'in'; setTimeout(() => done && done(), 420); }
+function wipeOff() { const w = $('#wipe'); w.className = 'out'; setTimeout(() => { w.style.display = 'none'; w.className = ''; }, 700); }
 
 /* ===================== INTRO ===================== */
 let introOn = false;
@@ -461,14 +435,33 @@ function intro() {
   const pool = VIVID.slice();
   for (let k = pool.length - 1; k > 0; k--) { const j = Math.floor(Math.random() * (k + 1)); [pool[k], pool[j]] = [pool[j], pool[k]]; }
   $('#ink').innerHTML = pool.slice(0, 4).map(x => `<img src="${x}" alt="">`).join('');
+  const FAC = [[[0,0],[46,0],[38,34],[0,42]],[[46,0],[100,0],[100,28],[61,41],[38,34]],[[0,42],[38,34],[52,63],[18,100],[0,100]],[[38,34],[61,41],[52,63]],[[61,41],[100,28],[100,70],[74,78],[52,63]],[[52,63],[74,78],[66,100],[18,100]],[[74,78],[100,70],[100,100],[66,100]]];
+  const fimg = pool[3] || pool[0], fw = $('#facets');
+  FAC.forEach((poly, i) => { const d = document.createElement('div'); d.className = 'fc'; d.style.backgroundImage = `url(${fimg})`;
+    d.style.clipPath = 'polygon(' + poly.map(p => p[0] + '% ' + p[1] + '%').join(',') + ')';
+    const cx = poly.reduce((a, p) => a + p[0], 0) / poly.length, cy = poly.reduce((a, p) => a + p[1], 0) / poly.length;
+    const ax = (Math.random() - .5), ay = (Math.random() - .5), ang = 110 + Math.random() * 70, dir = i % 2 ? 1 : -1;
+    d.style.transformOrigin = (50 + (cx - 50) * .25) + '% ' + (50 + (cy - 50) * .25) + '%';
+    d.animate([{ transform: `translate(${(50 - cx) * .9}%,${(50 - cy) * .9}%) rotate3d(${ax.toFixed(2)},${ay.toFixed(2)},${(dir * .3).toFixed(2)},${dir * ang}deg) scale(.55)`, filter: 'brightness(.5)' },
+      { offset: .6, filter: 'brightness(1.12)' },
+      { transform: 'none', filter: `brightness(${[1, .93, 1.04, .9, .97, 1.06, .95][i]})` }],
+      { duration: 1500 + i * 90, delay: 300 + i * 110, easing: 'cubic-bezier(.22,1,.36,1)', fill: 'both' });
+    fw.appendChild(d); });
+  const cr = $('#crease'), seg = new Set();
+  FAC.forEach(poly => poly.forEach((p, k) => { const q = poly[(k + 1) % poly.length]; const on = v => v[0] === 0 || v[0] === 100 || v[1] === 0 || v[1] === 100;
+    if (on(p) && on(q) && (p[0] === q[0] || p[1] === q[1])) return; const key = [p, q].map(String).sort().join('|'); seg.add(key); }));
+  cr.innerHTML = [...seg].map(k => { const [a, b] = k.split('|').map(v => v.split(',').map(Number));
+    return `<line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" stroke="rgba(255,250,240,.8)" vector-effect="non-scaling-stroke" style="stroke-width:2px"/><line x1="${a[0] + .35}" y1="${a[1] + .35}" x2="${b[0] + .35}" y2="${b[1] + .35}" stroke="rgba(40,25,15,.4)" style="stroke-width:1.2px" vector-effect="non-scaling-stroke"/>`; }).join('');
+  setTimeout(() => { cr.classList.add('on'); el.querySelector('.sigbox').classList.add('on'); }, 2300);
+  setTimeout(() => fw.querySelectorAll('.fc').forEach(f => f.classList.add('gone')), 2900);
   const leave = () => { if (!introOn) return; introOn = false; try { sessionStorage.setItem('ci', '1'); } catch (e) {}
-    const sw = el.querySelector('.sheet'), tgt = document.querySelector('.sigimg');
+    const sw = el.querySelector('.sigwrap'), tgt = document.querySelector('.sigimg');
     el.classList.add('out'); el.style.pointerEvents = 'none';
     if (tgt && tgt.offsetWidth) { const a = sw.getBoundingClientRect(), b = tgt.getBoundingClientRect();
       sw.style.transformOrigin = '0 0'; sw.style.transform = `translate(${b.left - a.left}px,${b.top - a.top}px) scale(${b.height / a.height}) rotate(-4deg)`; sw.style.opacity = '0'; }
     else sw.style.opacity = '0';
     setTimeout(() => el.remove(), 1400); runBar(); };
-  el.onclick = leave; setTimeout(leave, 8000);
+  el.onclick = leave; setTimeout(leave, 6600);
 }
 document.querySelector('.logo').addEventListener('click', e => { e.preventDefault();
   if (location.hash.slice(1)) location.hash = ''; else { window.scrollTo({ top: 0, behavior: 'smooth' }); if (mode !== 'show') route(); else { paused = false; goSlide(0); } } });
@@ -504,7 +497,7 @@ function route() {
           setTimeout(() => { st.style.opacity = 1; fly.remove(); wipeOff(); }, 1050); };
         if (fly.complete) requestAnimationFrame(go); else fly.onload = go;
       } else setTimeout(wipeOff, 80);
-    }, entering ? 820 : 0);
+    }, entering ? 440 : 0);
     mode = 'proj';
   } else if (h.startsWith('index')) {
     document.title = 'Index — Chista';

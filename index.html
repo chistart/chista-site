@@ -56,16 +56,17 @@ body.dark .sigimg{filter:invert(1)}
 @keyframes flowB{from{transform:scale(1.3) rotate(10deg) translate(5%,6%)}to{transform:scale(1.05) rotate(-4deg) translate(-8%,-3%)}}
 @keyframes flowC{from{transform:scale(1.15) rotate(0) translate(0,-7%)}to{transform:scale(1.4) rotate(14deg) translate(-4%,8%)}}
 #intro.fade{opacity:0;transition:opacity 1.4s ease}
-#intro .sigwrap{position:relative;clip-path:inset(-2% 100% -2% 0);animation:write 2.2s var(--ease) 2.3s forwards;transition:transform 1.2s var(--ease),opacity 1.2s ease}
+#intro .sigwrap{position:relative;clip-path:inset(-2% 100% -2% 0);animation:write 2.2s var(--ease) 2.9s forwards;transition:transform 1.2s var(--ease),opacity 1.2s ease}
 #intro .drop{position:absolute;left:50%;top:-60px;width:34px;height:34px;margin-left:-17px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background-size:cover;background-position:center;box-shadow:inset -4px -6px 10px rgba(0,0,0,.25);animation:fall .85s cubic-bezier(.55,0,1,.45) .25s forwards;z-index:3}
 @keyframes fall{0%{transform:translateY(0) scale(.7,1)}80%{transform:translateY(calc(50vh + 40px)) scale(.75,1.35)}100%{transform:translateY(calc(50vh + 52px)) scale(1.6,.35);opacity:0}}
-#intro svg.bl{position:absolute;inset:0;width:100%;height:100%;transition:opacity 1.2s ease}
+#intro svg.bl{position:absolute;inset:0;width:100%;height:100%;transition:opacity 1.6s ease}
+#intro #pig circle{mix-blend-mode:multiply}
 #intro svg.bl.gone{opacity:0}
 #intro.out{background:transparent;transition:background .9s ease .3s}
 #intro.out p,#intro.out .seal2{opacity:0!important;transition:opacity .4s}
-#intro .seal2{position:absolute;width:12%;right:4%;top:60%;opacity:0;animation:stamp .6s var(--out) 4.4s forwards}
+#intro .seal2{position:absolute;width:12%;right:4%;top:60%;opacity:0;animation:stamp .6s var(--out) 5s forwards}
 @keyframes stamp{from{opacity:0;transform:scale(1.6) rotate(-8deg)}to{opacity:1;transform:none}}
-#intro p{position:absolute;bottom:28px;margin:0;font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:var(--mute);opacity:0;animation:fadein 1s ease 4.6s forwards}
+#intro p{position:absolute;bottom:28px;margin:0;font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:var(--mute);opacity:0;animation:fadein 1s ease 5.2s forwards}
 @keyframes fadein{to{opacity:1}}
 /* reveal helpers */
 .mask{display:block;overflow:hidden}
@@ -235,7 +236,7 @@ footer .lk{display:flex;gap:26px;flex-wrap:wrap}
 <nav><a href="#" data-r="show">Works</a><a href="#index" data-r="index">Index</a><a href="#index/about" data-r="about">About</a><a class="mint" href="#p/bonjoy">Mint</a></nav></header>
 <button class="close" id="close" aria-label="Back to works">×</button>
 <svg width="0" height="0" style="position:absolute"><filter id="wcf" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.009" numOctaves="3" seed="3" result="t"/><feDisplacementMap in="SourceGraphic" in2="t" scale="90" xChannelSelector="R" yChannelSelector="G" result="d"/><feGaussianBlur in="d" stdDeviation="1.2"/></filter><filter id="liquid" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence type="fractalNoise" baseFrequency="0.006 0.009" numOctaves="2" seed="7" result="n"><animate attributeName="baseFrequency" dur="14s" values="0.006 0.009;0.011 0.006;0.006 0.009" repeatCount="indefinite"/></feTurbulence><feDisplacementMap in="SourceGraphic" in2="n" scale="70" xChannelSelector="R" yChannelSelector="G"/></filter></svg>
-<div id="intro" hidden><div class="drop" id="drop"></div><svg class="bl" id="bl" aria-hidden="true"><defs><mask id="bm"><circle id="bmc" cx="50%" cy="50%" r="0" fill="#fff" filter="url(#wcf)"/></mask></defs><image id="bli" width="100%" height="100%" preserveAspectRatio="xMidYMid slice" mask="url(#bm)"/><circle id="bmr" cx="50%" cy="50%" r="0" fill="none" stroke="rgba(60,30,20,.18)" stroke-width="6" filter="url(#wcf)"/></svg><div class="sigwrap"><div class="sigbox"><div class="ink" id="ink"></div></div><img class="seal2" src="seal.png" alt=""></div><p>Generative paintings · tap to enter</p></div>
+<div id="intro" hidden><svg class="bl" id="bl" aria-hidden="true"><g id="pig" style="mix-blend-mode:multiply"></g><g id="drops"></g></svg><div class="sigwrap"><div class="sigbox"><div class="ink" id="ink"></div></div><img class="seal2" src="seal.png" alt=""></div><p>Generative paintings · tap to enter</p></div>
 <main>
 <section id="show" aria-label="Works"><div class="bg" id="bg"></div></section>
 <div class="ctl" id="ctl"><button class="arw" id="prev" aria-label="Previous work">↑</button><button class="arw" id="next" aria-label="Next work">↓</button><span id="cnt">01 / 18</span><div class="bar"><i id="bar"></i></div><button id="pause">Pause</button></div>
@@ -426,11 +427,28 @@ function intro() {
   const pool = VIVID.slice();
   for (let k = pool.length - 1; k > 0; k--) { const j = Math.floor(Math.random() * (k + 1)); [pool[k], pool[j]] = [pool[j], pool[k]]; }
   $('#ink').innerHTML = pool.slice(0, 4).map(x => `<img src="${x}" alt="">`).join('');
-  $('#drop').style.backgroundImage = `url(${pool[4] || pool[0]})`;
-  $('#bli').setAttribute('href', pool[4] || pool[0]);
-  const vmin = Math.min(innerWidth, innerHeight), c = $('#bmc'), ring = $('#bmr');
-  setTimeout(() => tween(1900, k => { c.setAttribute('r', vmin * .46 * k); ring.setAttribute('r', vmin * .46 * k); }, null, t => 1 - Math.pow(1 - t, 3)), 1050);
-  setTimeout(() => $('#bl').classList.add('gone'), 2600);
+  const NS = 'http://www.w3.org/2000/svg', W = innerWidth, H = innerHeight, m = Math.min(W, H), pig = $('#pig'), dg = $('#drops');
+  const mk = (tag, at, par) => { const e = document.createElementNS(NS, tag); for (const k in at) e.setAttribute(k, at[k]); par.appendChild(e); return e; };
+  const COLS = [['#C8372D', '#8E1F1A'], ['#2F55B5', '#1B336F'], ['#E3A623', '#A8710E'], ['#1E8C74', '#0F5646'], ['#C0397A', '#7C1D4C']];
+  const spots = [[.5, .47, .30], [.36, .40, .21], [.64, .55, .23], [.42, .62, .19], [.61, .34, .18]];
+  spots.forEach(([fx, fy, fr], i) => {
+    const [col, edge] = COLS[i], x = W * fx, y = H * fy, R = m * fr, t0 = 250 + i * 380, fall = 560;
+    setTimeout(() => {
+      const d = mk('ellipse', { cx: x, cy: -30, rx: m * .012, ry: m * .018, fill: col }, dg);
+      tween(fall, k => { d.setAttribute('cy', -30 + (y + 30) * k); d.setAttribute('ry', m * (.018 + .02 * k)); d.setAttribute('rx', m * (.012 - .004 * k)); }, () => {
+        d.remove();
+        const g = mk('g', { filter: 'url(#wcf)' }, pig);
+        const body = mk('circle', { cx: x, cy: y, r: 0, fill: col, 'fill-opacity': .62 }, g);
+        const rim = mk('circle', { cx: x, cy: y, r: 0, fill: 'none', stroke: edge, 'stroke-opacity': .55, 'stroke-width': m * .006 }, g);
+        const core = mk('circle', { cx: x, cy: y, r: 0, fill: edge, 'fill-opacity': .25 }, g);
+        for (let j = 0; j < 7; j++) { const a = Math.random() * 6.28, dd = R * (.9 + Math.random() * .8), rr = m * (.004 + Math.random() * .012);
+          const sp = mk('circle', { cx: x, cy: y, r: rr, fill: col, 'fill-opacity': .75 }, pig);
+          tween(380 + Math.random() * 300, k => { sp.setAttribute('cx', x + Math.cos(a) * dd * k); sp.setAttribute('cy', y + Math.sin(a) * dd * k); }, null, t => 1 - Math.pow(1 - t, 3)); }
+        tween(1700, k => { body.setAttribute('r', R * k); rim.setAttribute('r', R * k); core.setAttribute('r', R * .45 * k); }, null, t => 1 - Math.pow(1 - t, 4));
+      }, t => t * t);
+    }, t0);
+  });
+  setTimeout(() => $('#bl').classList.add('gone'), 3300);
   const leave = () => { if (!introOn) return; introOn = false; try { sessionStorage.setItem('ci', '1'); } catch (e) {}
     const sw = el.querySelector('.sigwrap'), tgt = document.querySelector('.sigimg');
     el.classList.add('out'); el.style.pointerEvents = 'none';
@@ -438,7 +456,7 @@ function intro() {
       sw.style.transformOrigin = '0 0'; sw.style.transform = `translate(${b.left - a.left}px,${b.top - a.top}px) scale(${b.height / a.height})`; sw.style.opacity = '0.0'; }
     else sw.style.opacity = '0';
     setTimeout(() => el.remove(), 1400); runBar(); };
-  el.onclick = leave; setTimeout(leave, 7600);
+  el.onclick = leave; setTimeout(leave, 8000);
 }
 document.querySelector('.logo').addEventListener('click', e => { e.preventDefault();
   if (location.hash.slice(1)) location.hash = ''; else { window.scrollTo({ top: 0, behavior: 'smooth' }); if (mode !== 'show') route(); else { paused = false; goSlide(0); } } });
